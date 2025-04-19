@@ -1,3 +1,4 @@
+the : [ommit when translating]
 be : بودن
 to : به
 of : از

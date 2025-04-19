@@ -1,17 +1,22 @@
 import uuid
+import asyncio
 from typing import List, Optional, Dict, Any, TypedDict
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
+import logging
 import instructor
 from litellm import completion
 import litellm
 from pydantic import BaseModel
 from prompts import (get_system_prompt, get_translation_prompt,
                       get_dictionary_prompt, get_grammar_prompt, 
-                      get_examples_prompt, get_retry_prompt, get_judge_prompt)
+                      get_examples_prompt, get_retry_prompt, get_judge_prompt,
+                      get_chunking_prompt, get_consistency_prompt)
 
 
-litellm._turn_on_debug()
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+# litellm._turn_on_debug()
 client = instructor.from_litellm(completion)
 
 # Define the state schema
@@ -38,6 +43,10 @@ class TranslationState(TypedDict):
     initial_translation: Optional[str]
     judge_feedback: Optional[str]
     final_translation: Optional[str]
+    chunks: Optional[List[str]]
+    consistency_feedback: Optional[str]
+    consistency_status: Optional[str]
+    chunk_translations: Optional[List[str]]
 
 # Pydantic model for dictionary output
 class DictionaryOutput(BaseModel):
@@ -50,6 +59,16 @@ class GrammarOutput(BaseModel):
 # Pydantic model for examples output
 class ExamplesOutput(BaseModel):
     samples: List[str]
+
+# Pydantic model for chunking output
+class ChunkOutput(BaseModel):
+    chunks: List[str]
+
+# Pydantic model for consistency output
+class ConsistencyOutput(BaseModel):
+    status: str
+    translation: str
+    feedback: Optional[str]
 
 # Node to process dictionary
 def process_dictionary(state: TranslationState) -> TranslationState:
@@ -262,6 +281,116 @@ def build_translation_graph() -> StateGraph:
     
     # Edge from retry to end
     graph.add_edge("retry_translation", END)
+    
+    # Compile the graph with memory
+    return graph.compile(checkpointer=MemorySaver())
+
+# Node to split corpus into chunks
+async def split_corpus(state: TranslationState) -> TranslationState:
+    logger.debug(f"split_corpus: Input state: {state}")
+    try:
+        prompt = get_chunking_prompt(state["sentence"])
+        response = client.chat.completions.create(
+            model=state["fixed_model"],
+            api_base=state["fixed_api_base"],
+            api_key=state["fixed_api_key"],
+            api_version=state["fixed_api_version"],
+            messages=[
+                {"role": "system", "content": "You are a text processing assistant."},
+                {"role": "user", "content": prompt}
+            ],
+            response_model=ChunkOutput,
+            max_tokens=5000,
+            temperature=0.5
+        )
+        chunks = response.chunks
+        if not chunks:
+            logger.warning("No chunks generated; using original sentence as single chunk")
+            chunks = [state["sentence"]]
+        logger.debug(f"split_corpus: Generated chunks: {chunks}")
+        return {"chunks": chunks}
+    except Exception as e:
+        logger.error(f"split_corpus: Error during chunking: {str(e)}")
+        # Fallback: Use the original sentence as a single chunk
+        return {"chunks": [state["sentence"]]}
+
+# Helper to process a single chunk
+async def process_chunk(chunk: str, state: TranslationState, graph):
+    logger.debug(f"process_chunk: Processing chunk: {chunk}")
+    chunk_state = state.copy()
+    chunk_state["sentence"] = chunk
+    try:
+        result = await graph.ainvoke(chunk_state, config={"configurable": {"thread_id": str(uuid.uuid4())}})
+        return result["final_translation"]
+    except Exception as e:
+        logger.error(f"process_chunk: Error processing chunk '{chunk}': {str(e)}")
+        return f"Error: {str(e)}"
+
+# Node to process chunks in parallel
+async def process_chunks(state: TranslationState) -> TranslationState:
+    logger.debug(f"process_chunks: Input state: {state}")
+    if "chunks" not in state or not state["chunks"]:
+        logger.error("process_chunks: No chunks found in state")
+        raise ValueError("No chunks available to process")
+    
+    graph = build_translation_graph()
+    tasks = [process_chunk(chunk, state, graph) for chunk in state["chunks"]]
+    translations = await asyncio.gather(*tasks, return_exceptions=True)
+    logger.debug(f"process_chunks: Translations: {translations}")
+    return {"chunk_translations": translations}
+
+# Node to check consistency
+async def check_consistency(state: TranslationState) -> TranslationState:
+    logger.debug(f"check_consistency: Input state: {state}")
+    try:
+        prompt = get_consistency_prompt(
+            source_language=state["source_language"],
+            target_language=state["target_language"],
+            chunks=state["chunks"],
+            translations=state["chunk_translations"]
+        )
+        response = client.chat.completions.create(
+            model=state["fixed_model"],
+            api_base=state["fixed_api_base"],
+            api_key=state["fixed_api_key"],
+            api_version=state["fixed_api_version"],
+            messages=[
+                {"role": "system", "content": "You are a translation quality evaluator."},
+                {"role": "user", "content": prompt}
+            ],
+            response_model=ConsistencyOutput,
+            max_tokens=1000,
+            temperature=0.5
+        )
+        logger.debug(f"check_consistency: Consistency response: {response}")
+        return {
+            "final_translation": response.translation,
+            "consistency_feedback": response.feedback,
+            "consistency_status": response.status
+        }
+    except Exception as e:
+        logger.error(f"check_consistency: Error during consistency check: {str(e)}")
+        # Fallback: Concatenate translations as-is
+        return {
+            "final_translation": " ".join(str(t) for t in state["chunk_translations"]),
+            "consistency_feedback": f"Consistency check failed: {str(e)}",
+            "consistency_status": "ERROR"
+        }
+
+# Build the supernode graph
+def build_supernode_graph() -> StateGraph:
+    graph = StateGraph(TranslationState)
+    
+    # Add nodes
+    graph.add_node("split_corpus", split_corpus)
+    graph.add_node("process_chunks", process_chunks)
+    graph.add_node("check_consistency", check_consistency)
+    
+    # Define edges
+    graph.set_entry_point("split_corpus")
+    graph.add_edge("split_corpus", "process_chunks")
+    graph.add_edge("process_chunks", "check_consistency")
+    graph.add_edge("check_consistency", END)
     
     # Compile the graph with memory
     return graph.compile(checkpointer=MemorySaver())

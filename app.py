@@ -1,7 +1,7 @@
 import streamlit as st
-from graph import build_translation_graph
+from graph import build_translation_graph, build_supernode_graph
 import uuid
-
+import asyncio
 
 # Streamlit app configuration
 st.set_page_config(page_title="Hire a Pro Linguist", layout="wide")
@@ -32,6 +32,10 @@ with st.form(key="translation_form"):
     grammar_file = st.file_uploader("Upload Grammar Rules (text file)", type=["txt"], key="grammar")
     dictionary_file = st.file_uploader("Upload Dictionary (text file)", type=["txt"], key="dictionary")
     examples_file = st.file_uploader("Upload Examples (text file)", type=["txt"], key="examples")
+
+    # Option to process as single sentence or corpus
+    processing_mode = st.radio("Processing Mode", ["Single Sentence", "Large Corpus"], index=0)
+    use_llm_judge = st.checkbox("use llm as a judge", value=True)
 
     submit_button = st.form_submit_button(label="Generate Translation")
 
@@ -81,28 +85,48 @@ if submit_button:
                 "fixed_api_base": fixed_endpoint,
                 "fixed_api_key": fixed_api_key,
                 "fixed_api_version": fixed_api_version,
-                "use_judge": True
+                "use_judge": use_llm_judge
             }
 
-            # Build and invoke the LangGraph workflow
-            graph = build_translation_graph()
-            with st.spinner("Generating translation..."):
-                result = graph.invoke(initial_state, config={"configurable": {"thread_id": str(uuid.uuid4())}})
-
-            # Display the translation prompt
-            st.subheader("Generated Translation Prompt")
-            st.write(result.get("translation_prompt", "No prompt generated."))
-
-            # Display the final translation
-            st.subheader("Translation Result")
-            final_translation = {
-                "translation_model": result.get("translation_model", "No translation model."),
-                "fixed_model": result.get("fixed_model", "No fixed model."),
-                "initial_translation": result.get("initial_translation", "No initial translation."),
-                "judge_feedback": result.get("judge_feedback", "No judge feedback."),
-                "final_translation": result.get("final_translation", "No final translation.")
-            }
-            st.write(final_translation)
-
+            # Choose processing mode
+            if processing_mode == "Single Sentence":
+                graph = build_translation_graph()
+                with st.spinner("Generating translation..."):
+                    result = graph.invoke(initial_state, config={"configurable": {"thread_id": str(uuid.uuid4())}})
+                
+                # Display results
+                st.subheader("Generated Translation Prompt")
+                st.write(result.get("translation_prompt", "No prompt generated."))
+                
+                st.subheader("Translation Result")
+                final_translation = {
+                    "translation_model": result.get("translation_model", "No translation model."),
+                    "fixed_model": result.get("fixed_model", "No fixed model."),
+                    "initial_translation": result.get("initial_translation", "No initial translation."),
+                    "judge_feedback": result.get("judge_feedback", "No judge feedback."),
+                    "final_translation": result.get("final_translation", "No final translation.")
+                }
+                st.write(final_translation)
+            
+            else:  # Large Corpus
+                graph = build_supernode_graph()
+                with st.spinner("Processing large corpus..."):
+                    # Run async graph invocation
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    result = loop.run_until_complete(graph.ainvoke(initial_state, config={"configurable": {"thread_id": str(uuid.uuid4())}}))
+                    loop.close()
+                
+                # Display results
+                st.subheader("Chunked Translations")
+                st.write({"chunks": result.get("chunks", []), "translations": result.get("chunk_translations", [])})
+                
+                st.subheader("Final Translation")
+                final_translation = {
+                    "consistency_status": result.get("consistency_status", "No status."),
+                    "final_translation": result.get("final_translation", "No final translation."),
+                    "consistency_feedback": result.get("consistency_feedback", "No feedback.")
+                }
+                st.write(final_translation)
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")

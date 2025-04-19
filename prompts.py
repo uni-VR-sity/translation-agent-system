@@ -71,3 +71,40 @@ def get_judge_prompt(
     Evaluate the translation. If it is accurate and maintains the meaning, word order, and context, return 'APPROVED'.
     If there are issues, provide specific feedback on what needs correction and return the feedback as a string.
     """
+
+# prompts.py
+def get_chunking_prompt(text: str, max_chunk_size: int = 500) -> str:
+    return f"""
+    You are a text processing assistant. Split the following text into chunks for translation.
+    Each chunk should be semantically coherent (e.g., complete sentences or paragraphs) and not exceed {max_chunk_size} characters.
+    Return a list of chunks as strings.
+
+    Text:
+    {text}
+
+    Output format:
+    ["chunk1", "chunk2", ...]
+    """
+
+def get_consistency_prompt(source_language: str, target_language: str, chunks: list, translations: list) -> str:
+    return f"""
+    You are a translation quality evaluator. Review the following translated chunks for consistency in terminology, style, and tone.
+    Original text was in {source_language}, translated to {target_language}.
+    
+    Original chunks:
+    {chunks}
+    
+    Translated chunks:
+    {translations}
+    
+    Check for:
+    - Consistent use of terminology across chunks.
+    - Uniform style and tone.
+    - Grammatical correctness and context preservation.
+    
+    If consistent, return "APPROVED" with the concatenated translation.
+    If inconsistencies are found, provide feedback and suggest a revised concatenated translation.
+    
+    Output format:
+    {{"status": "APPROVED" | "REVISED", "translation": "concatenated translation", "feedback": "optional feedback"}}
+    """
