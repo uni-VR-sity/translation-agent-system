@@ -1,0 +1,386 @@
+# Farsi Grammar Guide for English Translators
+
+## General Structure
+
+Persian (فارسی) is an Indo-European language with a Subject-Object-Verb (SOV) word order, though it allows some flexibility compared to stricter SOV languages. The head of a phrase typically comes at the end, meaning that:
+
+- Adjectives follow the ezafe construction (explained below) after nouns
+- Objects precede verbs
+- Possessors precede possessed items
+
+A distinctive feature of Farsi is the ezafe construction (marked by the suffix -e/-ye) that links elements in a noun phrase:
+
+> کتاب**ِ** بزرگ
+> 
+> book-**EZ** big
+> 
+> big book
+
+> خانه**یِ** من
+> 
+> house-**EZ** me
+> 
+> my house
+
+### Key typological features:
+
+- Pro-drop language (subject pronouns often omitted)
+- Lacks grammatical gender
+- Uses postpositions and prepositions
+- Has no definite article (uses context or specificity markers)
+- Verb agrees with subject in person and number
+
+## Nouns
+
+### Number
+
+Farsi has singular and plural forms. Plurals are formed by adding one of two suffixes:
+
+1. **-ها**: General plural suffix, can be used with all nouns
+   - کتاب (book) → کتاب**ها** (books)
+   - ماشین (car) → ماشین**ها** (cars)
+
+2. **-ان/-گان**: Primarily used with animate nouns
+   - مرد (man) → مرد**ان** (men)
+   - پرنده (bird) → پرنده**گان** (birds)
+
+### The Ezafe Construction
+
+The ezafe (-e after consonants, -ye after vowels) connects:
+
+1. **Noun + adjective**:
+   - ماشین**ِ** سبز (green car)
+   - خانه**یِ** بزرگ (big house)
+
+2. **Noun + possessor**:
+   - کتاب**ِ** علی (Ali's book)
+   - در**ِ** خانه (door of the house)
+
+3. **Noun + noun** (for compound concepts):
+   - آب**ِ** پرتقال (orange juice)
+
+### Indefiniteness
+
+Indefiniteness is marked by the suffix -ی:
+
+- کتاب**ی** (a book)
+- مرد**ی** (a man)
+
+When both indefinite marker and adjective are present, the ezafe is used:
+- کتاب**ِ** بزرگ**ی** (a big book)
+
+### Definiteness
+
+Definite nouns have no special marker but can be emphasized using demonstratives:
+- **این** کتاب (this book)
+- **آن** خانه (that house)
+
+The suffix -ه/-ه can mark specificity:
+- کتاب**ه** (the specific book we're talking about)
+
+## Pronouns
+
+### Personal Pronouns
+
+| Person    | Singular | Plural    |
+|-----------|----------|-----------|
+| 1st       | من (I)  | ما (we)   |
+| 2nd       | تو (you) | شما (you)|
+| 3rd       | او (he/she/it)| آنها/ایشان (they) |
+
+In formal situations, شما (plural you) is used for singular formal address.
+
+### Possessive Pronouns
+
+Possessive forms can appear in two ways:
+
+1. **Ezafe construction + independent pronoun**:
+   - کتابِ من (my book)
+   - خانه‌یِ تو (your house)
+
+2. **Possessive enclitics**:
+   - کتاب**م** (my book)
+   - کتاب**ت** (your book)
+   - کتاب**ش** (his/her book)
+   - کتاب**مان** (our book)
+   - کتاب**تان** (your book, plural/formal)
+   - کتاب**شان** (their book)
+
+### Demonstrative Pronouns
+
+- **این** (this), **آن** (that)
+- **اینها** (these), **آنها** (those)
+
+## Prepositions
+
+Farsi uses a combination of simple prepositions and compound prepositions:
+
+### Simple prepositions:
+- **در** (in/at)
+- **از** (from)
+- **به** (to)
+- **با** (with)
+- **بی** (without)
+- **بر** (on/upon)
+- **تا** (until)
+
+### Compound prepositions:
+- **در باره‌یِ** (about)
+- **به خاطرِ** (because of)
+- **از طرفِ** (on behalf of)
+
+Examples:
+> در خانه
+> 
+> in house
+> 
+> in the house
+
+> با دوستان
+> 
+> with friends
+> 
+> with friends
+
+## Verbs
+
+### Verb Structure
+
+Farsi verbs consist of a stem and personal endings. There are two stems for each verb:
+- Present stem: Used for present and future tenses
+- Past stem: Used for past tenses
+
+For example, for the verb "to go":
+- Present stem: **رو**
+- Past stem: **رفت**
+
+### Simple Present Tense
+
+Formed with present stem + personal endings:
+
+| Person | Singular | Plural |
+|--------|----------|--------|
+| 1st    | می**رو**م | می**رو**یم |
+| 2nd    | می**رو**ی | می**رو**ید |
+| 3rd    | می**رو**د | می**رو**ند |
+
+The prefix **می-** is added to the present stem to form the present indicative.
+
+Examples:
+- من به مدرسه می**رو**م. (I go to school.)
+- علی کتاب می**خوان**د. (Ali reads a book.)
+
+### Simple Past Tense
+
+Formed with past stem + personal endings:
+
+| Person | Singular | Plural |
+|--------|----------|--------|
+| 1st    | **رفت**م | **رفت**یم |
+| 2nd    | **رفت**ی | **رفت**ید |
+| 3rd    | **رفت** | **رفت**ند |
+
+Examples:
+- من به بازار **رفت**م. (I went to the market.)
+- آن**ها** به پارک **رفت**ند. (They went to the park.)
+
+### Present Perfect Tense
+
+Formed with past participle (past stem + -ه) + present forms of "to be":
+
+| Person | Singular | Plural |
+|--------|----------|--------|
+| 1st    | **رفت**ه ام | **رفت**ه ایم |
+| 2nd    | **رفت**ه ای | **رفت**ه اید |
+| 3rd    | **رفت**ه است | **رفت**ه اند |
+
+Examples:
+- من به ایران **رفت**ه ام. (I have gone to Iran.)
+- آنها فیلم **دید**ه اند. (They have seen the movie.)
+
+### Past Perfect Tense
+
+Formed with past participle + past forms of "to be":
+
+| Person | Singular | Plural |
+|--------|----------|--------|
+| 1st    | **رفت**ه بودم | **رفت**ه بودیم |
+| 2nd    | **رفت**ه بودی | **رفت**ه بودید |
+| 3rd    | **رفت**ه بود | **رفت**ه بودند |
+
+Examples:
+- وقتی رسید**م**، او **رفت**ه بود. (When I arrived, he had gone.)
+
+### Future Tense
+
+Formed with the auxiliary **خواه** (will) + past stem:
+
+| Person | Singular | Plural |
+|--------|----------|--------|
+| 1st    | **خواه**م رفت | **خواه**یم رفت |
+| 2nd    | **خواه**ی رفت | **خواه**ید رفت |
+| 3rd    | **خواه**د رفت | **خواه**ند رفت |
+
+Examples:
+- فردا به دانشگاه **خواه**م رفت. (I will go to university tomorrow.)
+
+### Subjunctive Mood
+
+The present subjunctive is formed with the present stem + personal endings, but without the **می-** prefix:
+
+| Person | Singular | Plural |
+|--------|----------|--------|
+| 1st    | ب**رو**م | ب**رو**یم |
+| 2nd    | ب**رو**ی | ب**رو**ید |
+| 3rd    | ب**رو**د | ب**رو**ند |
+
+The prefix **ب-** is typically added (with some exceptions).
+
+Used after certain verbs, for wishes, possibilities, etc.:
+- می‌خواهم به پارک **ب**روم. (I want to go to the park.)
+- ممکن است باران **ب**بارد. (It might rain.)
+
+### Imperative
+
+Formed from the present stem:
+- Singular: **ب**رو (go!)
+- Plural: **ب**روید (go! - plural/formal)
+
+Negative imperatives add **ن-** instead of **ب-**:
+- **ن**رو! (Don't go!)
+
+### Negation
+
+Verbs are negated by adding the prefix **ن-** (or **نم-** before **ی-**):
+- **ن**رفتم. (I didn't go.)
+- **نم**ی‌روم. (I don't go.)
+
+## Adjectives
+
+### Basic Forms
+
+Adjectives in Farsi are invariable - they don't change for gender or number:
+- مرد**ِ** **خوب** (good man)
+- زن**ِ** **خوب** (good woman)
+- مردها**یِ** **خوب** (good men)
+
+### Comparative
+
+Formed with the suffix **-تر**:
+- خوب (good) → خوب**تر** (better)
+- بزرگ (big) → بزرگ**تر** (bigger)
+
+Example:
+- این کتاب از آن **بزرگ**تر است. (This book is bigger than that one.)
+
+### Superlative
+
+Formed with the suffix **-ترین**:
+- شجاع (good) → خوب**ترین** (best)
+- بزرگ (big) → بزرگ**ترین** (biggest)
+
+Example:
+- این **بزرگ**ترین کتاب است. (This is the biggest book.)
+
+## Adverbs
+
+Many adverbs are formed by adding **-انه** to adjectives:
+- شجاع (brave) → شجاع**انه** (bravely)
+- بزدل (coward) → بزدل**انه** (cowardly)
+
+Some common adverbs:
+- **همیشه** (always)
+- **هرگز** (never)
+- **امروز** (today)
+- **فردا** (tomorrow)
+- **دیروز** (yesterday)
+- **اینجا** (here)
+- **آنجا** (there)
+- **خیلی** (very)
+- **کم** (little/few)
+
+## Numbers
+
+### Cardinal Numbers
+
+- 0: صفر
+- 1: یک
+- 2: دو
+- 3: سه
+- 4: چهار
+- 5: پنج
+- 6: شش
+- 7: هفت
+- 8: هشت
+- 9: نه
+- 10: ده
+- 100: صد
+- 1000: هزار
+
+### Ordinal Numbers
+
+Formed by adding **-م** to cardinal numbers:
+- یک → یک**م** (first)
+- دو → دو**م** (second)
+- سه → سو**م** (third)
+
+## Common Translation Challenges
+
+### Word Order Differences
+
+English: Subject-Verb-Object (SVO)
+Farsi: Subject-Object-Verb (SOV)
+
+English: *I read the book.*
+Farsi: *من کتاب را خواندم.* (I book read.)
+
+### The Object Marker "را"
+
+Definite direct objects are followed by the marker **را** (often pronounced as **رو** in informal speech):
+
+- من کتاب **را** خواند**م**. (I read the book.)
+- من علی **را** دید**م**. (I saw Ali.)
+
+### Lack of "to be" in Present Tense
+
+In the present tense, "to be" often appears as a suffix:
+
+- من دانشجو **ام**. (I am a student.)
+- تو بزرگ **ی**. (You are big.)
+- او خوب **است**. (He/she is good.)
+
+### Light Verb Constructions
+
+Many Farsi verbs are formed by combining a noun or adjective with a simple verb:
+
+- **کار کردن** (to work, lit. "work do")
+- **تلفن کردن** (to telephone, lit. "telephone do")
+- **کمک کردن** (to help, lit. "help do")
+- **دوست داشتن** (to like/love, lit. "friend have")
+
+### Compound Verbs
+
+These are extremely common in Farsi and often consist of a non-verbal element plus a simple verb:
+- **گوش دادن** (to listen, lit. "ear give")
+- **یاد گرفتن** (to learn, lit. "memory take")
+- **دوست داشتن** (to like/love, lit. "friend have")
+
+### Taarof (Cultural Politeness)
+
+Farsi has a complex system of politeness (تعارف) that affects language use:
+- Using plural forms for singular formal address
+- Special vocabulary for politeness
+- Indirect expressions of desires and requests
+
+Example:
+English: *Please come in.*
+Farsi formal: *بفرمایید.* (Literally "Command" but used as "Please come in/go ahead")
+
+## Key Translation Tips
+
+1. Place verbs at the end of sentences
+2. Use ezafe construction for adjectives and possessives
+3. Remember to mark definite direct objects with "را"
+4. Pay attention to formal vs. informal contexts
+5. Use compound verbs instead of looking for direct verb equivalents
+6. Consider cultural context when translating polite expressions

@@ -1,0 +1,474 @@
+be : بودن
+to : به
+of : از
+and : و
+a : یک
+in : در
+that : که
+have : داشتن
+I : من
+it : آن
+for : برای
+not : نه
+on : روی
+with : با
+he : او
+as : به عنوان
+you : تو/شما
+do : انجام دادن
+at : در
+this : این
+but : اما
+his : مال او
+by : به وسیله
+from : از
+they : آنها
+we : ما
+say : گفتن
+her : او/مال او
+she : او
+or : یا
+an : یک
+will : خواهد
+my : من/مال من
+one : یک
+all : همه
+would : می‌خواست
+there : آنجا
+their : مال آنها
+what : چه
+so : بنابراین
+up : بالا
+out : بیرون
+if : اگر
+about : درباره
+who : چه کسی
+get : گرفتن
+which : کدام
+go : رفتن
+me : من/مرا
+when : وقتی که
+make : ساختن
+can : می‌توانم
+like : مانند/دوست داشتن
+time : زمان
+no : نه
+just : فقط
+him : او را
+know : دانستن
+take : گرفتن
+people : مردم
+into : به داخل
+year : سال
+your : مال تو/شما
+good : خوب
+some : بعضی
+could : می‌توانست
+them : آنها را
+see : دیدن
+other : دیگر
+than : از
+then : سپس
+now : اکنون
+look : نگاه کردن
+only : فقط
+come : آمدن
+its : مال آن
+over : بالای
+think : فکر کردن
+also : همچنین
+back : پشت/برگشتن
+after : بعد از
+use : استفاده کردن
+two : دو
+how : چگونه
+our : مال ما
+work : کار
+first : اول
+well : خوب
+way : راه
+even : حتی
+new : جدید
+want : خواستن
+because : چون/زیرا
+any : هر
+these : اینها
+give : دادن
+day : روز
+most : بیشترین
+us : ما را
+person : شخص
+thing : چیز
+man : مرد
+world : جهان
+life : زندگی
+hand : دست
+part : بخش
+child : کودک
+eye : چشم
+woman : زن
+place : مکان
+week : هفته
+case : مورد
+point : نقطه
+government : دولت
+company : شرکت
+number : عدد
+group : گروه
+problem : مشکل
+fact : حقیقت
+find : یافتن
+tell : گفتن
+ask : پرسیدن
+seem : به نظر رسیدن
+feel : احساس کردن
+try : تلاش کردن
+leave : ترک کردن
+call : صدا زدن
+last : آخر
+long : طولانی
+great : بزرگ
+little : کوچک
+own : خود
+old : قدیمی
+right : درست
+big : بزرگ
+high : بلند
+different : متفاوت
+small : کوچک
+large : بزرگ
+next : بعدی
+early : زود
+young : جوان
+important : مهم
+few : کم
+public : عمومی
+bad : بد
+same : همان
+able : قادر
+beneath : زیر
+under : زیر
+above : بالای
+between : بین
+through : از میان
+before : قبل از
+against : علیه
+without : بدون
+behind : پشت
+around : اطراف
+off : خاموش
+down : پایین
+during : در طول
+since : از زمان
+within : در داخل
+along : در امتداد
+across : در عرض
+among : در میان
+toward : به سوی
+already : قبلا
+yet : هنوز
+still : هنوز
+both : هر دو
+each : هر
+until : تا
+while : در حالی که
+however : اما
+though : اگرچه
+where : کجا
+why : چرا
+again : دوباره
+ever : همیشه
+too : هم
+never : هرگز
+always : همیشه
+sometimes : گاهی اوقات
+often : اغلب
+usually : معمولا
+really : واقعا
+almost : تقریبا
+here : اینجا
+once : یک بار
+together : با هم
+enough : کافی
+quite : کاملا
+rather : نسبتا
+perhaps : شاید
+suddenly : ناگهان
+especially : مخصوصا
+actually : در واقع
+indeed : واقعا
+simply : به سادگی
+finally : سرانجام
+probably : احتمالا
+certainly : مسلما
+clearly : به وضوح
+obviously : آشکارا
+apparently : ظاهرا
+generally : عموما
+naturally : طبیعتا
+basically : اساسا
+entirely : کاملا
+particularly : به طور خاص
+specifically : مشخصا
+exactly : دقیقا
+mainly : عمدتا
+mostly : بیشتر
+primarily : در درجه اول
+largely : عمدتا
+increasingly : به طور فزاینده
+significantly : به طور قابل توجهی
+considerably : به طور قابل ملاحظه‌ای
+substantially : به طور اساسی
+relatively : نسبتا
+comparatively : به طور مقایسه‌ای
+essentially : اساسا
+three : سه
+four : چهار
+five : پنج
+six : شش
+seven : هفت
+eight : هشت
+nine : نه
+ten : ده
+hundred : صد
+thousand : هزار
+million : میلیون
+billion : میلیارد
+first : اول
+second : دوم
+third : سوم
+fourth : چهارم
+fifth : پنجم
+last : آخر
+next : بعدی
+water : آب
+food : غذا
+money : پول
+book : کتاب
+house : خانه
+car : ماشین
+school : مدرسه
+job : شغل
+business : تجارت
+country : کشور
+city : شهر
+family : خانواده
+friend : دوست
+mother : مادر
+father : پدر
+brother : برادر
+sister : خواهر
+son : پسر
+daughter : دختر
+wife : همسر
+husband : شوهر
+student : دانش‌آموز
+teacher : معلم
+doctor : دکتر
+patient : بیمار
+customer : مشتری
+manager : مدیر
+employee : کارمند
+worker : کارگر
+client : مشتری
+member : عضو
+leader : رهبر
+president : رئیس جمهور
+king : پادشاه
+queen : ملکه
+boy : پسر
+girl : دختر
+baby : نوزاد
+animal : حیوان
+dog : سگ
+cat : گربه
+bird : پرنده
+fish : ماهی
+tree : درخت
+flower : گل
+river : رودخانه
+mountain : کوه
+sea : دریا
+sun : خورشید
+moon : ماه
+star : ستاره
+air : هوا
+fire : آتش
+earth : زمین
+sky : آسمان
+night : شب
+morning : صبح
+afternoon : بعد از ظهر
+evening : عصر
+day : روز
+week : هفته
+month : ماه
+season : فصل
+winter : زمستان
+spring : بهار
+summer : تابستان
+fall : پاییز
+color : رنگ
+red : قرمز
+blue : آبی
+green : سبز
+yellow : زرد
+black : سیاه
+white : سفید
+body : بدن
+head : سر
+face : صورت
+hair : مو
+eye : چشم
+ear : گوش
+nose : بینی
+mouth : دهان
+tooth : دندان
+tongue : زبان
+hand : دست
+foot : پا
+leg : پا
+arm : بازو
+finger : انگشت
+heart : قلب
+brain : مغز
+blood : خون
+bone : استخوان
+skin : پوست
+health : سلامتی
+disease : بیماری
+medicine : دارو
+hospital : بیمارستان
+death : مرگ
+birth : تولد
+power : قدرت
+force : نیرو
+energy : انرژی
+war : جنگ
+peace : صلح
+law : قانون
+police : پلیس
+crime : جرم
+prison : زندان
+court : دادگاه
+judge : قاضی
+lawyer : وکیل
+case : پرونده
+right : حق
+education : آموزش
+art : هنر
+science : علم
+technology : فناوری
+research : تحقیق
+computer : کامپیوتر
+machine : ماشین
+paper : کاغذ
+pen : قلم
+pencil : مداد
+letter : نامه
+word : کلمه
+sentence : جمله
+language : زبان
+idea : ایده
+name : نام
+question : سوال
+answer : پاسخ
+information : اطلاعات
+news : اخبار
+story : داستان
+history : تاریخ
+game : بازی
+team : تیم
+sport : ورزش
+music : موسیقی
+movie : فیلم
+television : تلویزیون
+radio : رادیو
+picture : تصویر
+photo : عکس
+camera : دوربین
+phone : تلفن
+computer : کامپیوتر
+internet : اینترنت
+email : ایمیل
+website : وب‌سایت
+program : برنامه
+system : سیستم
+data : داده
+file : پرونده
+video : ویدیو
+audio : صدا
+light : نور
+sound : صدا
+voice : صدا
+noise : سروصدا
+price : قیمت
+cost : هزینه
+value : ارزش
+quality : کیفیت
+change : تغییر
+difference : تفاوت
+increase : افزایش
+decrease : کاهش
+rise : افزایش
+fall : کاهش
+growth : رشد
+development : توسعه
+process : فرآیند
+system : سیستم
+method : روش
+form : فرم
+design : طراحی
+function : عملکرد
+effect : اثر
+result : نتیجه
+reason : دلیل
+purpose : هدف
+goal : هدف
+plan : برنامه
+decision : تصمیم
+choice : انتخاب
+opportunity : فرصت
+chance : شانس
+possibility : امکان
+ability : توانایی
+skill : مهارت
+experience : تجربه
+knowledge : دانش
+understanding : درک
+memory : حافظه
+mind : ذهن
+thought : فکر
+feeling : احساس
+emotion : احساس
+love : عشق
+hate : تنفر
+fear : ترس
+hope : امید
+trust : اعتماد
+belief : باور
+opinion : نظر
+view : دیدگاه
+attitude : نگرش
+behavior : رفتار
+action : عمل
+movement : حرکت
+direction : جهت
+position : موقعیت
+level : سطح
+size : اندازه
+shape : شکل
+space : فضا
+area : منطقه
+region : منطقه
+place : مکان
+location : موقعیت
+distance : فاصله
+speed : سرعت
+weight : وزن
+measure : اندازه‌گیری
+amount : مقدار
+range : محدوده
+scale : مقیاس
+rate : نرخ
+degree : درجه

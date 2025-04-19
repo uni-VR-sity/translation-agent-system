@@ -1,0 +1,356 @@
+# 100 English-Farsi Sentence Pairs
+
+## Basic Statements & Questions
+
+English: My name is Sarah.
+Farsi: اسم من سارا است.
+
+English: What time is it?
+Farsi: ساعت چند است؟
+
+English: Today is Monday.
+Farsi: امروز دوشنبه است.
+
+English: I live in Canada.
+Farsi: من در کانادا زندگی می‌کنم.
+
+English: How old are you?
+Farsi: شما چند سال دارید؟
+
+English: The weather is nice today.
+Farsi: هوا امروز خوب است.
+
+English: Do you speak English?
+Farsi: آیا انگلیسی صحبت می‌کنید؟
+
+English: I am a student.
+Farsi: من دانشجو هستم.
+
+English: Please come in.
+Farsi: لطفاً بفرمایید داخل.
+
+English: I don't understand.
+Farsi: من نمی‌فهمم.
+
+## Food & Dining
+
+English: I would like to order tea, please.
+Farsi: من می‌خواهم چای سفارش دهم، لطفاً.
+
+English: This restaurant is very famous.
+Farsi: این رستوران خیلی معروف است.
+
+English: The food is delicious.
+Farsi: غذا خوشمزه است.
+
+English: Do you have any vegetarian options?
+Farsi: آیا گزینه‌های گیاهی دارید؟
+
+English: How spicy is this dish?
+Farsi: این غذا چقدر تند است؟
+
+## Travel & Directions
+
+English: Where is the nearest hotel?
+Farsi: نزدیک‌ترین هتل کجاست؟
+
+English: I need to buy a ticket.
+Farsi: من نیاز دارم یک بلیط بخرم.
+
+English: Turn right at the traffic light.
+Farsi: در چراغ راهنما به راست بپیچید.
+
+English: Is this the way to the museum?
+Farsi: آیا این راه به موزه است؟
+
+English: We will arrive tomorrow morning.
+Farsi: ما فردا صبح خواهیم رسید.
+
+## Shopping
+
+English: How much does this cost?
+Farsi: این چقدر قیمت دارد؟
+
+English: I'm looking for a gift for my friend.
+Farsi: من دنبال یک هدیه برای دوستم می‌گردم.
+
+English: Do you have this in a larger size?
+Farsi: آیا این را در سایز بزرگتر دارید؟
+
+English: I would like to try it on.
+Farsi: من می‌خواهم آن را امتحان کنم.
+
+English: Can I pay by credit card?
+Farsi: آیا می‌توانم با کارت اعتباری پرداخت کنم؟
+
+## Work & Study
+
+English: I have a meeting at 3 PM.
+Farsi: من ساعت ۳ بعد از ظهر جلسه دارم.
+
+English: The exam was very difficult.
+Farsi: امتحان خیلی سخت بود.
+
+English: I need to finish this project by Friday.
+Farsi: من باید این پروژه را تا جمعه تمام کنم.
+
+English: She works as a doctor.
+Farsi: او به عنوان پزشک کار می‌کند.
+
+English: The university library closes at 9 PM.
+Farsi: کتابخانه دانشگاه ساعت ۹ شب بسته می‌شود.
+
+## Family & Relationships
+
+English: My brother lives in Tehran.
+Farsi: برادر من در تهران زندگی می‌کند.
+
+English: We got married last year.
+Farsi: ما سال گذشته ازدواج کردیم.
+
+English: How many children do you have?
+Farsi: شما چند فرزند دارید؟
+
+English: My grandmother is 85 years old.
+Farsi: مادربزرگ من ۸۵ سال دارد.
+
+English: I miss my family very much.
+Farsi: من خیلی دلتنگ خانواده‌ام هستم.
+
+## Health & Wellbeing
+
+English: I have a headache.
+Farsi: من سردرد دارم.
+
+English: You should see a doctor.
+Farsi: شما باید یک پزشک را ببینید.
+
+English: I exercise three times a week.
+Farsi: من هفته‌ای سه بار ورزش می‌کنم.
+
+English: Take this medicine twice a day.
+Farsi: این دارو را روزی دو بار مصرف کنید.
+
+English: I need to get more sleep.
+Farsi: من نیاز دارم بیشتر بخوابم.
+
+## Daily Activities
+
+English: I wake up at 6 AM every day.
+Farsi: من هر روز ساعت ۶ صبح بیدار می‌شوم.
+
+English: She is washing the dishes.
+Farsi: او در حال شستن ظرف‌ها است.
+
+English: We usually eat dinner at 7 PM.
+Farsi: ما معمولاً ساعت ۷ شب شام می‌خوریم.
+
+English: He watches TV before going to bed.
+Farsi: او قبل از خواب تلویزیون تماشا می‌کند.
+
+English: I take a shower every morning.
+Farsi: من هر صبح دوش می‌گیرم.
+
+## Weather & Seasons
+
+English: It's raining heavily today.
+Farsi: امروز باران شدیدی می‌بارد.
+
+English: Winter in this city is very cold.
+Farsi: زمستان در این شهر خیلی سرد است.
+
+English: What's the weather forecast for tomorrow?
+Farsi: پیش‌بینی هوا برای فردا چیست؟
+
+English: I love the autumn leaves.
+Farsi: من عاشق برگ‌های پاییزی هستم.
+
+English: It's too hot to go outside.
+Farsi: هوا خیلی گرم است برای بیرون رفتن.
+
+## Emotions & Feelings
+
+English: I am very happy today.
+Farsi: من امروز خیلی خوشحال هستم.
+
+English: Why are you angry with me?
+Farsi: چرا از من عصبانی هستی؟
+
+English: I'm feeling tired after work.
+Farsi: بعد از کار احساس خستگی می‌کنم.
+
+English: She was surprised by the news.
+Farsi: او از این خبر متعجب شد.
+
+English: I'm nervous about the interview.
+Farsi: من درباره مصاحبه مضطرب هستم.
+
+## Hobbies & Interests
+
+English: I enjoy playing the piano.
+Farsi: من از نواختن پیانو لذت می‌برم.
+
+English: What kind of books do you like to read?
+Farsi: چه نوع کتاب‌هایی دوست دارید بخوانید؟
+
+English: She collects vintage postcards.
+Farsi: او کارت‌پستال‌های قدیمی جمع‌آوری می‌کند.
+
+English: We go hiking every weekend.
+Farsi: ما هر آخر هفته به کوهنوردی می‌رویم.
+
+English: Photography is my favorite hobby.
+Farsi: عکاسی سرگرمی مورد علاقه من است.
+
+## Technology & Modern Life
+
+English: My phone battery is low.
+Farsi: باتری تلفن من کم است.
+
+English: I forgot my password.
+Farsi: من رمز عبورم را فراموش کردم.
+
+English: Have you updated the software?
+Farsi: آیا نرم‌افزار را به‌روز کرده‌اید؟
+
+English: Social media has changed our lives.
+Farsi: رسانه‌های اجتماعی زندگی ما را تغییر داده‌اند.
+
+English: I can't connect to the Wi-Fi.
+Farsi: من نمی‌توانم به وای‌فای متصل شوم.
+
+## Future Plans & Hopes
+
+English: I will travel to Europe next year.
+Farsi: من سال آینده به اروپا سفر خواهم کرد.
+
+English: What do you want to be in the future?
+Farsi: در آینده می‌خواهید چه کاره شوید؟
+
+English: We are planning to buy a house.
+Farsi: ما در حال برنامه‌ریزی برای خرید یک خانه هستیم.
+
+English: I hope to learn a new language.
+Farsi: من امیدوارم یک زبان جدید یاد بگیرم.
+
+English: She dreams of becoming a famous writer.
+Farsi: او رویای تبدیل شدن به یک نویسنده معروف را دارد.
+
+## Past Experiences
+
+English: I visited Iran five years ago.
+Farsi: من پنج سال پیش از ایران دیدن کردم.
+
+English: Have you ever tried Persian food?
+Farsi: آیا تا به حال غذای ایرانی را امتحان کرده‌اید؟
+
+English: They lived in that house for twenty years.
+Farsi: آنها بیست سال در آن خانه زندگی کردند.
+
+English: I learned to swim when I was six.
+Farsi: من وقتی شش ساله بودم شنا کردن یاد گرفتم.
+
+English: She has never been to a concert.
+Farsi: او هرگز به کنسرت نرفته است.
+
+## Cultural References
+
+English: Nowruz is the Persian New Year.
+Farsi: نوروز سال نو ایرانی است.
+
+English: Hafez is a famous Persian poet.
+Farsi: حافظ یک شاعر معروف ایرانی است.
+
+English: Traditional Persian carpets are beautiful.
+Farsi: قالی‌های سنتی ایرانی زیبا هستند.
+
+English: Iranian hospitality is well-known worldwide.
+Farsi: مهمان‌نوازی ایرانی در سراسر جهان شناخته شده است.
+
+English: Saffron is an important spice in Persian cuisine.
+Farsi: زعفران یک ادویه مهم در آشپزی ایرانی است.
+
+## Education & Knowledge
+
+English: I'm studying Persian literature.
+Farsi: من ادبیات فارسی می‌خوانم.
+
+English: This is a difficult language to learn.
+Farsi: این یک زبان سخت برای یادگیری است.
+
+English: The teacher explained the grammar rules.
+Farsi: معلم قواعد دستوری را توضیح داد.
+
+English: I need to improve my writing skills.
+Farsi: من نیاز دارم مهارت‌های نوشتن خود را بهبود بخشم.
+
+English: She graduated from university with honors.
+Farsi: او با افتخار از دانشگاه فارغ‌التحصیل شد.
+
+## Complex Sentences & Idioms
+
+English: If it doesn't rain tomorrow, we will go to the park.
+Farsi: اگر فردا باران نبارد، ما به پارک خواهیم رفت.
+
+English: Although he was tired, he continued working.
+Farsi: اگرچه او خسته بود، به کار کردن ادامه داد.
+
+English: Time flies when you're having fun.
+Farsi: وقتی خوش می‌گذرانی، زمان پرواز می‌کند.
+
+English: She speaks as if she knows everything.
+Farsi: او طوری صحبت می‌کند انگار همه چیز را می‌داند.
+
+English: Better late than never.
+Farsi: دیر رسیدن بهتر از هرگز نرسیدن است.
+
+## Transportation
+
+English: The train leaves at 8:30 AM.
+Farsi: قطار ساعت ۸:۳۰ صبح حرکت می‌کند.
+
+English: I usually take the bus to work.
+Farsi: من معمولاً با اتوبوس به سر کار می‌روم.
+
+English: How long does it take to drive to Tehran?
+Farsi: رانندگی تا تهران چقدر طول می‌کشد؟
+
+English: My car broke down on the highway.
+Farsi: ماشین من در بزرگراه خراب شد.
+
+English: Is there a direct flight to Isfahan?
+Farsi: آیا پرواز مستقیم به اصفهان وجود دارد؟
+
+## Nature & Environment
+
+English: The mountains are covered with snow.
+Farsi: کوه‌ها پوشیده از برف هستند.
+
+English: We should plant more trees.
+Farsi: ما باید درختان بیشتری بکاریم.
+
+English: The Caspian Sea is beautiful in summer.
+Farsi: دریای خزر در تابستان زیباست.
+
+English: Air pollution is a serious problem in big cities.
+Farsi: آلودگی هوا یک مشکل جدی در شهرهای بزرگ است.
+
+English: I love the sound of birds singing in the morning.
+Farsi: من صدای آواز پرندگان را در صبح دوست دارم.
+
+## Miscellaneous Complex Sentences
+
+English: The more I learn about Persian culture, the more I appreciate it.
+Farsi: هرچه بیشتر درباره فرهنگ ایرانی یاد می‌گیرم، بیشتر آن را تحسین می‌کنم.
+
+English: Not only did she speak Persian fluently, but she also knew several dialects.
+Farsi: او نه تنها فارسی را روان صحبت می‌کرد، بلکه چندین گویش را نیز می‌دانست.
+
+English: Had I known you were coming, I would have prepared a special dinner.
+Farsi: اگر می‌دانستم شما می‌آیید، یک شام ویژه آماده می‌کردم.
+
+English: By the time we arrived at the station, the train had already left.
+Farsi: وقتی به ایستگاه رسیدیم، قطار قبلاً رفته بود.
+
+English: She asked whether I had ever visited the historical sites in Shiraz.
+Farsi: او پرسید که آیا من تا به حال از مکان‌های تاریخی شیراز دیدن کرده‌ام.
