@@ -251,22 +251,92 @@ def retry_translation(state: TranslationState) -> TranslationState:
     return {"final_translation": translation}
 
 # Build the LangGraph workflow
+# def build_translation_graph() -> StateGraph:
+#     graph = StateGraph(TranslationState)
+    
+#     # Add nodes
+#     graph.add_node("process_dictionary", process_dictionary)
+#     graph.add_node("process_grammar", process_grammar)
+#     graph.add_node("process_examples", process_examples)
+#     graph.add_node("perform_translation", perform_translation)
+#     graph.add_node("judge_translation", judge_translation)
+#     graph.add_node("retry_translation", retry_translation)
+    
+#     # Define edges
+#     graph.set_entry_point("process_dictionary")
+#     graph.add_edge("process_dictionary", "process_grammar")
+#     graph.add_edge("process_grammar", "process_examples")
+#     graph.add_edge("process_examples", "perform_translation")
+#     graph.add_edge("perform_translation", "judge_translation")
+    
+#     # Conditional edge after judge
+#     graph.add_conditional_edges(
+#         "judge_translation",
+#         decide_retry,
+#         {
+#             END: END,
+#             "retry_translation": "retry_translation"
+#         }
+#     )
+    
+#     # Edge from retry to end
+#     graph.add_edge("retry_translation", END)
+    
+#     # Compile the graph with memory
+#     return graph.compile(checkpointer=MemorySaver())
+
+async def process_resources_parallel(state: TranslationState) -> TranslationState:
+    logger.debug("process_resources_parallel: Starting parallel processing")
+    
+    # Define coroutines for each processing task
+    async def run_dictionary():
+        return process_dictionary(state)
+    
+    async def run_grammar():
+        return process_grammar(state)
+    
+    async def run_examples():
+        return process_examples(state)
+    
+    # Run all tasks in parallel
+    results = await asyncio.gather(
+        run_dictionary(),
+        run_grammar(),
+        run_examples(),
+        return_exceptions=True
+    )
+    
+    # Initialize state updates
+    state_updates = {}
+    
+    # Process results
+    for i, result in enumerate(results):
+        if isinstance(result, Exception):
+            logger.error(f"process_resources_parallel: Error in task {i}: {str(result)}")
+            continue
+        if i == 0:
+            state_updates["dictionary_content"] = result.get("dictionary_content")
+        elif i == 1:
+            state_updates["grammar_content"] = result.get("grammar_content")
+        elif i == 2:
+            state_updates["examples_content"] = result.get("examples_content")
+    
+    logger.debug(f"process_resources_parallel: State updates: {state_updates}")
+    return state_updates
+
+# Modified build_translation_graph function
 def build_translation_graph() -> StateGraph:
     graph = StateGraph(TranslationState)
     
     # Add nodes
-    graph.add_node("process_dictionary", process_dictionary)
-    graph.add_node("process_grammar", process_grammar)
-    graph.add_node("process_examples", process_examples)
+    graph.add_node("process_resources_parallel", process_resources_parallel)
     graph.add_node("perform_translation", perform_translation)
     graph.add_node("judge_translation", judge_translation)
     graph.add_node("retry_translation", retry_translation)
     
     # Define edges
-    graph.set_entry_point("process_dictionary")
-    graph.add_edge("process_dictionary", "process_grammar")
-    graph.add_edge("process_grammar", "process_examples")
-    graph.add_edge("process_examples", "perform_translation")
+    graph.set_entry_point("process_resources_parallel")
+    graph.add_edge("process_resources_parallel", "perform_translation")
     graph.add_edge("perform_translation", "judge_translation")
     
     # Conditional edge after judge

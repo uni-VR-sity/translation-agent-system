@@ -92,7 +92,10 @@ if submit_button:
             if processing_mode == "Single Sentence":
                 graph = build_translation_graph()
                 with st.spinner("Generating translation..."):
-                    result = graph.invoke(initial_state, config={"configurable": {"thread_id": str(uuid.uuid4())}})
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    result = loop.run_until_complete(graph.ainvoke(initial_state, config={"configurable": {"thread_id": str(uuid.uuid4())}}))
+                    loop.close()
                 
                 # Display results
                 st.subheader("Generated Translation Prompt")
