@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="700" fill="#f8f9fa" rx="10" ry="10"/>
+  
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#333">Translation Agent System</text>
+  
+  <!-- Single Sentence Graph (Top Section) -->
+  <rect x="50" y="60" width="700" height="280" fill="#e9ecef" rx="8" ry="8" stroke="#ced4da" stroke-width="1"/>
+  <text x="400" y="85" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#333">Single Sentence Translation Graph</text>
+  
+  <!-- Nodes for Single Sentence Graph -->
+  <rect x="180" y="110" width="120" height="180" rx="10" ry="10" fill="#74c0fc" stroke="#4dabf7" stroke-width="2"/>  
+  <circle cx="110" cy="200" r="35" fill="#4dabf7" stroke="#339af0" stroke-width="2"/>
+  <text x="110" y="200" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Input</text>
+  
+  <circle cx="240" cy="140" r="30" fill="#4dabf7" stroke="#339af0" stroke-width="2"/>
+  <text x="240" y="140" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Dictionary</text>
+  
+  <circle cx="240" cy="200" r="30" fill="#4dabf7" stroke="#339af0" stroke-width="2"/>
+  <text x="240" y="200" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Grammar</text>
+  
+  <circle cx="240" cy="260" r="30" fill="#4dabf7" stroke="#339af0" stroke-width="2"/>
+  <text x="240" y="260" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Examples</text>
+  
+  <circle cx="440" cy="200" r="40" fill="#4dabf7" stroke="#339af0" stroke-width="2"/>
+  <text x="440" y="200" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Translation</text>
+  
+  <circle cx="560" cy="200" r="40" fill="#4dabf7" stroke="#339af0" stroke-width="2"/>
+  <text x="560" y="200" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Judge</text>
+    
+  <circle cx="680" cy="200" r="25" fill="#f783ac" stroke="#f06595" stroke-width="2"/>
+  <text x="680" y="200" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">End</text>
+  
+  <!-- Edges for Single Sentence Graph -->
+  <line x1="145" y1="200" x2="180" y2="200" stroke="#339af0" stroke-width="2"/>
+  <line x1="145" y1="200" x2="180" y2="140" stroke="#339af0" stroke-width="2"/>
+  <line x1="145" y1="200" x2="180" y2="260" stroke="#339af0" stroke-width="2"/>
+  
+  <line x1="270" y1="140" x2="400" y2="180" stroke="#339af0" stroke-width="2"/>
+  <line x1="270" y1="200" x2="400" y2="200" stroke="#339af0" stroke-width="2"/>
+  <line x1="270" y1="260" x2="400" y2="220" stroke="#339af0" stroke-width="2"/>
+  
+  <!-- Directed loop between Translation and Judge (dashed) -->
+  <path d="M480 200 Q 500 170 520 200" stroke="#339af0" stroke-width="2" stroke-dasharray="5,3" fill="none"/>
+  <polygon points="495,180 505,185 495,190" fill="#339af0"/>
+  
+  <path d="M520 200 Q 500 230 480 200" stroke="#339af0" stroke-width="2" stroke-dasharray="5,3" fill="none"/>
+  <polygon points="505,220 495,215 505,210" fill="#339af0"/>
+  
+  <line x1="600" y1="200" x2="655" y2="200" stroke="#339af0" stroke-width="2"/>
+  
+  <!-- Edge labels -->
+  <text x="240" y="310" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Process Resources</text>
+  <text x="360" y="150" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#495057">Aggregation</text>
+  <text x="500" y="165" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#495057">Refinement Loop</text>
+  <text x="500" y="240" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#495057">(Conditional)</text>
+  <text x="628" y="185" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#495057">Approved</text>
+  
+  <!-- Supernode Graph (Bottom Section) -->
+  <rect x="50" y="360" width="700" height="280" fill="#e9ecef" rx="8" ry="8" stroke="#ced4da" stroke-width="1"/>
+  <text x="400" y="385" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#333">Large Corpus Translation Graph</text>
+  
+  <!-- Nodes for Supernode Graph -->
+  <circle cx="120" cy="500" r="40" fill="#51cf66" stroke="#40c057" stroke-width="2"/>
+  <text x="120" y="500" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Split</text>
+  
+  <rect x="250" y="430" width="200" height="140" rx="10" ry="10" fill="#74c0fc" stroke="#4dabf7" stroke-width="2"/>
+  <text x="350" y="450" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">Process Chunks</text>
+  
+  <!-- Mini graphs inside the supernode - vertically arranged -->
+  <rect x="300" y="470" width="100" height="80" rx="5" ry="5" fill="#228be6" stroke="#1c7ed6" stroke-width="1"/>
+  <circle cx="350" cy="485" r="12" fill="#ffffff" stroke="#1971c2" stroke-width="1"/>
+  <text x="350" y="485" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#1971c2">1</text>
+  <circle cx="350" cy="510" r="12" fill="#ffffff" stroke="#1971c2" stroke-width="1"/>
+  <text x="350" y="510" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#1971c2">2</text>
+  <circle cx="350" cy="535" r="12" fill="#ffffff" stroke="#1971c2" stroke-width="1"/>
+  <text x="350" y="535" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#1971c2">...</text>
+  <text x="350" y="570" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">Parallel Graphs</text>
+  
+  <circle cx="570" cy="500" r="40" fill="#51cf66" stroke="#40c057" stroke-width="2"/>
+  <text x="570" y="500" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white">Consistency</text>
+  
+  <circle cx="680" cy="500" r="25" fill="#f783ac" stroke="#f06595" stroke-width="2"/>
+  <text x="680" y="500" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">End</text>
+  
+  <!-- Edges for Supernode Graph -->
+  <line x1="160" y1="500" x2="250" y2="500" stroke="#40c057" stroke-width="2"/>
+  <line x1="450" y1="500" x2="530" y2="500" stroke="#40c057" stroke-width="2"/>
+  <line x1="610" y1="500" x2="655" y2="500" stroke="#40c057" stroke-width="2"/>
+  
+  <!-- Edge labels -->
+  <text x="490" y="490" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#495057">Aggregation</text>
+    
+  <!-- Legend -->
+  <rect x="50" y="650" width="700" height="1" fill="#ced4da"/>
+  <circle cx="100" cy="670" r="8" fill="#4dabf7" stroke="#339af0" stroke-width="1"/>
+  <text x="120" y="674" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#495057">Single Sentence Node</text>
+  
+  <circle cx="260" cy="670" r="8" fill="#51cf66" stroke="#40c057" stroke-width="1"/>
+  <text x="280" y="674" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#495057">Supernode</text>
+  
+  <rect x="380" y="664" width="16" height="12" rx="3" ry="3" fill="#74c0fc" stroke="#4dabf7" stroke-width="1"/>
+  <text x="405" y="674" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#495057">Process Container</text>
+  
+  <circle cx="520" cy="670" r="8" fill="#f783ac" stroke="#f06595" stroke-width="1"/>
+  <text x="540" y="674" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#495057">End Node</text>
+  
+  <path d="M620 670 Q 640 660 660 670" stroke="#339af0" stroke-width="2" stroke-dasharray="5,3" fill="none"/>
+  <text x="640" y="690" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#495057">Conditional Loop</text>
+</svg>
