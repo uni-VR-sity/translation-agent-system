@@ -8,9 +8,33 @@ st.set_page_config(page_title="Hire a Pro Linguist", layout="wide")
 
 # Sidebar for API configuration
 st.sidebar.title("API Configuration")
-model = st.sidebar.selectbox("Select Model for Translation", ["Gpt-4o-mini", "Phi-3-small-8k-instruct"], index=0, help="Choose the model for the translation task")
-endpoint_url = st.sidebar.text_input("Endpoint URL (optional)", placeholder="Leave blank to use secrets.toml", help="Enter your Azure OpenAI endpoint URL or leave blank")
-api_key = st.sidebar.text_input("API Key (optional)", type="password", placeholder="Leave blank to use secrets.toml", help="Enter your Azure OpenAI API key or leave blank")
+
+# Translation model selection panel
+st.sidebar.subheader("Translation Model")
+model = st.sidebar.selectbox("Select Model for Translation", 
+                            ["Gpt-4o-mini", "Phi-3-small-8k-instruct", "Gemma3:12b", "Phi4"], 
+                            index=0, 
+                            help="Choose the model for the translation task")
+
+# Fixed model selection panel
+st.sidebar.subheader("Fixed Model (for processing/judging)")
+fixed_model = st.sidebar.selectbox("Select Fixed Model", 
+                                 ["Gpt-4o-mini", "Phi-3-small-8k-instruct", "Gemma3:12b", "Phi4"], 
+                                 index=0, 
+                                 help="Choose the model for processing context and judging translations")
+
+# Use local Ollama checkbox
+use_local_ollama = st.sidebar.checkbox("Use Local Ollama", 
+                                     value=False, 
+                                     help="Check to use local Ollama instance instead of remote API")
+
+endpoint_url = st.sidebar.text_input("Endpoint URL (optional)", 
+                                    placeholder="Leave blank to use secrets.toml", 
+                                    help="Enter your Azure OpenAI endpoint URL or leave blank")
+api_key = st.sidebar.text_input("API Key (optional)", 
+                               type="password", 
+                               placeholder="Leave blank to use secrets.toml", 
+                               help="Enter your Azure OpenAI API key or leave blank")
 
 # Main panel
 st.title("Translation Agent System")
@@ -45,24 +69,56 @@ if submit_button:
         st.error("Please fill in Source Language, Target Language, and Text to Translate.")
     else:
         try:
-            # Get credentials for the selected translation model
-            if model == "Gpt-4o-mini":
-                translation_endpoint = st.secrets["Gpt-4o-mini"]["ENDPOINT_URL"]
-                translation_api_key = st.secrets["Gpt-4o-mini"]["API_KEY"]
-                translation_api_version = "2025-01-01-preview"
-            else:  # Phi-3-small-8k-instruct
-                translation_endpoint = st.secrets["Phi-3-small-8k-instruct"]["ENDPOINT_URL"]
-                translation_api_key = st.secrets["Phi-3-small-8k-instruct"]["API_KEY"]
-                translation_api_version = "2024-05-01-preview"
-
-            # Override with user-provided credentials if available
-            translation_endpoint = endpoint_url if endpoint_url else translation_endpoint
-            translation_api_key = api_key if api_key else translation_api_key
-
-            # Get credentials for the fixed model (Gpt-4o-mini)
-            fixed_endpoint = st.secrets["Gpt-4o-mini"]["ENDPOINT_URL"]
-            fixed_api_key = st.secrets["Gpt-4o-mini"]["API_KEY"]
-            fixed_api_version = "2025-01-01-preview"
+            # Determine endpoints based on whether local Ollama is selected
+            if use_local_ollama:
+                # Using local Ollama for all models
+                ollama_endpoint = "http://localhost:11434"
+                translation_endpoint = ollama_endpoint
+                translation_api_key = ""
+                translation_api_version = ""
+                fixed_endpoint = ollama_endpoint
+                fixed_api_key = ""
+                fixed_api_version = ""
+            else:
+                # Get credentials for the selected translation model
+                if model == "Gpt-4o-mini":
+                    translation_endpoint = st.secrets["Gpt-4o-mini"]["ENDPOINT_URL"]
+                    translation_api_key = st.secrets["Gpt-4o-mini"]["API_KEY"]
+                    translation_api_version = "2025-01-01-preview"
+                elif model == "Phi-3-small-8k-instruct":
+                    translation_endpoint = st.secrets["Phi-3-small-8k-instruct"]["ENDPOINT_URL"]
+                    translation_api_key = st.secrets["Phi-3-small-8k-instruct"]["API_KEY"]
+                    translation_api_version = "2024-05-01-preview"
+                elif model == "Gemma3:12b":
+                    translation_endpoint = st.secrets.get("Gemma3:12b", {}).get("ENDPOINT_URL", "")
+                    translation_api_key = st.secrets.get("Gemma3:12b", {}).get("API_KEY", "")
+                    translation_api_version = "2024-05-01-preview"
+                else:  # Phi4
+                    translation_endpoint = st.secrets.get("Phi4", {}).get("ENDPOINT_URL", "")
+                    translation_api_key = st.secrets.get("Phi4", {}).get("API_KEY", "")
+                    translation_api_version = "2024-05-01-preview"
+                
+                # Get credentials for the selected fixed model
+                if fixed_model == "Gpt-4o-mini":
+                    fixed_endpoint = st.secrets["Gpt-4o-mini"]["ENDPOINT_URL"]
+                    fixed_api_key = st.secrets["Gpt-4o-mini"]["API_KEY"]
+                    fixed_api_version = "2025-01-01-preview"
+                elif fixed_model == "Phi-3-small-8k-instruct":
+                    fixed_endpoint = st.secrets["Phi-3-small-8k-instruct"]["ENDPOINT_URL"]
+                    fixed_api_key = st.secrets["Phi-3-small-8k-instruct"]["API_KEY"]
+                    fixed_api_version = "2024-05-01-preview"
+                elif fixed_model == "Gemma3:12b":
+                    fixed_endpoint = st.secrets.get("Gemma3:12b", {}).get("ENDPOINT_URL", "")
+                    fixed_api_key = st.secrets.get("Gemma3:12b", {}).get("API_KEY", "")
+                    fixed_api_version = "2024-05-01-preview"
+                else:  # Phi4
+                    fixed_endpoint = st.secrets.get("Phi4", {}).get("ENDPOINT_URL", "")
+                    fixed_api_key = st.secrets.get("Phi4", {}).get("API_KEY", "")
+                    fixed_api_version = "2024-05-01-preview"
+                
+                # Override with user-provided credentials if available
+                translation_endpoint = endpoint_url if endpoint_url else translation_endpoint
+                translation_api_key = api_key if api_key else translation_api_key
 
             # Read content from uploaded files
             grammar_content = grammar_file.read().decode("utf-8") if grammar_file else None
@@ -77,11 +133,11 @@ if submit_button:
                 "dictionary_content_raw": dictionary_content,
                 "grammar_content_raw": grammar_content,
                 "examples_content_raw": examples_content,
-                "translation_model": f"azure/{model}",
+                "translation_model": model if use_local_ollama else f"azure/{model}",
                 "translation_api_base": translation_endpoint,
                 "translation_api_key": translation_api_key,
                 "translation_api_version": translation_api_version,
-                "fixed_model": "azure/Gpt-4o-mini",
+                "fixed_model": fixed_model if use_local_ollama else f"azure/{fixed_model}",
                 "fixed_api_base": fixed_endpoint,
                 "fixed_api_key": fixed_api_key,
                 "fixed_api_version": fixed_api_version,

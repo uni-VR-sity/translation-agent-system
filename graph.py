@@ -19,6 +19,19 @@ logger = logging.getLogger(__name__)
 # litellm._turn_on_debug()
 client = instructor.from_litellm(completion)
 
+# Function to determine if we're using Ollama
+def is_ollama_model(model_name):
+    """Check if the model name indicates an Ollama model."""
+    return not model_name.startswith("azure/")
+
+# Prepare model name for API calls
+def prepare_model_name(model_name, api_base):
+    """Format the model name correctly for the API call."""
+    if "localhost:11434" in api_base and not model_name.startswith("ollama/"):
+        # For Ollama models, we need to add the ollama/ prefix
+        return f"ollama/{model_name}"
+    return model_name
+
 # Define the state schema
 class TranslationState(TypedDict):
     sentence: str
@@ -81,8 +94,10 @@ def process_dictionary(state: TranslationState) -> TranslationState:
                                    text=state["sentence"],
                                    dictionary=dictionary_text)
     
+    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
+    
     response = client.chat.completions.create(
-        model=state["fixed_model"],
+        model=model,
         api_base=state["fixed_api_base"],
         api_key=state["fixed_api_key"],
         api_version=state["fixed_api_version"],
@@ -108,8 +123,10 @@ def process_grammar(state: TranslationState) -> TranslationState:
                                 text=state["sentence"],
                                 grammar=grammar_text)
     
+    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
+    
     response = client.chat.completions.create(
-        model=state["fixed_model"],
+        model=model,
         api_base=state["fixed_api_base"],
         api_key=state["fixed_api_key"],
         api_version=state["fixed_api_version"],
@@ -135,8 +152,10 @@ def process_examples(state: TranslationState) -> TranslationState:
                                  text=state["sentence"],
                                  examples=examples_text)
     
+    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
+    
     response = client.chat.completions.create(
-        model=state["fixed_model"],
+        model=model,
         api_base=state["fixed_api_base"],
         api_key=state["fixed_api_key"],
         api_version=state["fixed_api_version"],
@@ -169,8 +188,10 @@ def perform_translation(state: TranslationState) -> TranslationState:
         {"role": "user", "content": translation_prompt}
     ]
     
+    model = prepare_model_name(state["translation_model"], state["translation_api_base"])
+    
     response = client.chat.completions.create(
-        model=state["translation_model"],
+        model=model,
         api_base=state["translation_api_base"],
         api_key=state["translation_api_key"],
         api_version=state["translation_api_version"],
@@ -201,8 +222,10 @@ def judge_translation(state: TranslationState) -> TranslationState:
         translation_prompt=state["translation_prompt"]
     )
     
+    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
+    
     response = client.chat.completions.create(
-        model=state["fixed_model"],
+        model=model,
         api_base=state["fixed_api_base"],
         api_key=state["fixed_api_key"],
         api_version=state["fixed_api_version"],
@@ -235,8 +258,10 @@ def retry_translation(state: TranslationState) -> TranslationState:
         {"role": "user", "content": retry_prompt}
     ]
     
+    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
+    
     response = client.chat.completions.create(
-        model=state["fixed_model"],
+        model=model,
         api_base=state["fixed_api_base"],
         api_key=state["fixed_api_key"],
         api_version=state["fixed_api_version"],
@@ -249,41 +274,6 @@ def retry_translation(state: TranslationState) -> TranslationState:
     
     translation = response.choices[0].message.content
     return {"final_translation": translation}
-
-# Build the LangGraph workflow
-# def build_translation_graph() -> StateGraph:
-#     graph = StateGraph(TranslationState)
-    
-#     # Add nodes
-#     graph.add_node("process_dictionary", process_dictionary)
-#     graph.add_node("process_grammar", process_grammar)
-#     graph.add_node("process_examples", process_examples)
-#     graph.add_node("perform_translation", perform_translation)
-#     graph.add_node("judge_translation", judge_translation)
-#     graph.add_node("retry_translation", retry_translation)
-    
-#     # Define edges
-#     graph.set_entry_point("process_dictionary")
-#     graph.add_edge("process_dictionary", "process_grammar")
-#     graph.add_edge("process_grammar", "process_examples")
-#     graph.add_edge("process_examples", "perform_translation")
-#     graph.add_edge("perform_translation", "judge_translation")
-    
-#     # Conditional edge after judge
-#     graph.add_conditional_edges(
-#         "judge_translation",
-#         decide_retry,
-#         {
-#             END: END,
-#             "retry_translation": "retry_translation"
-#         }
-#     )
-    
-#     # Edge from retry to end
-#     graph.add_edge("retry_translation", END)
-    
-#     # Compile the graph with memory
-#     return graph.compile(checkpointer=MemorySaver())
 
 async def process_resources_parallel(state: TranslationState) -> TranslationState:
     logger.debug("process_resources_parallel: Starting parallel processing")
@@ -360,8 +350,11 @@ async def split_corpus(state: TranslationState) -> TranslationState:
     logger.debug(f"split_corpus: Input state: {state}")
     try:
         prompt = get_chunking_prompt(state["sentence"])
+        
+        model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
+        
         response = client.chat.completions.create(
-            model=state["fixed_model"],
+            model=model,
             api_base=state["fixed_api_base"],
             api_key=state["fixed_api_key"],
             api_version=state["fixed_api_version"],
@@ -419,8 +412,11 @@ async def check_consistency(state: TranslationState) -> TranslationState:
             chunks=state["chunks"],
             translations=state["chunk_translations"]
         )
+        
+        model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
+        
         response = client.chat.completions.create(
-            model=state["fixed_model"],
+            model=model,
             api_base=state["fixed_api_base"],
             api_key=state["fixed_api_key"],
             api_version=state["fixed_api_version"],
