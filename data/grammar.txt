@@ -1,4 +1,4 @@
-# Farsi Grammar Guide for English Translators
+# Persian Grammar Guide for English Translators
 
 ## General Structure
 
@@ -8,7 +8,7 @@ Persian (فارسی) is an Indo-European language with a Subject-Object-Verb (SO
 - Objects precede verbs
 - Possessors precede possessed items
 
-A distinctive feature of Farsi is the ezafe construction (marked by the suffix -e/-ye) that links elements in a noun phrase:
+A distinctive feature of Persian is the ezafe construction (marked by the suffix -e/-ye) that links elements in a noun phrase:
 
 > کتاب**ِ** بزرگ
 > 
@@ -34,7 +34,7 @@ A distinctive feature of Farsi is the ezafe construction (marked by the suffix -
 
 ### Number
 
-Farsi has singular and plural forms. Plurals are formed by adding one of two suffixes:
+Persian has singular and plural forms. Plurals are formed by adding one of two suffixes:
 
 1. **-ها**: General plural suffix, can be used with all nouns
    - کتاب (book) → کتاب**ها** (books)
@@ -113,7 +113,7 @@ Possessive forms can appear in two ways:
 
 ## Prepositions
 
-Farsi uses a combination of simple prepositions and compound prepositions:
+Persian uses a combination of simple prepositions and compound prepositions:
 
 ### Simple prepositions:
 - **در** (in/at)
@@ -146,7 +146,7 @@ Examples:
 
 ### Verb Structure
 
-Farsi verbs consist of a stem and personal endings. There are two stems for each verb:
+Persian verbs consist of a stem and personal endings. There are two stems for each verb:
 - Present stem: Used for present and future tenses
 - Past stem: Used for past tenses
 
@@ -259,7 +259,7 @@ Verbs are negated by adding the prefix **ن-** (or **نم-** before **ی-**):
 
 ### Basic Forms
 
-Adjectives in Farsi are invariable - they don't change for gender or number:
+Adjectives in Persian are invariable - they don't change for gender or number:
 - مرد**ِ** **خوب** (good man)
 - زن**ِ** **خوب** (good woman)
 - مردها**یِ** **خوب** (good men)
@@ -329,10 +329,10 @@ Formed by adding **-م** to cardinal numbers:
 ### Word Order Differences
 
 English: Subject-Verb-Object (SVO)
-Farsi: Subject-Object-Verb (SOV)
+Persian: Subject-Object-Verb (SOV)
 
 English: *I read the book.*
-Farsi: *من کتاب را خواندم.* (I book read.)
+Persian: *من کتاب را خواندم.* (I book read.)
 
 ### The Object Marker "را"
 
@@ -351,7 +351,7 @@ In the present tense, "to be" often appears as a suffix:
 
 ### Light Verb Constructions
 
-Many Farsi verbs are formed by combining a noun or adjective with a simple verb:
+Many Persian verbs are formed by combining a noun or adjective with a simple verb:
 
 - **کار کردن** (to work, lit. "work do")
 - **تلفن کردن** (to telephone, lit. "telephone do")
@@ -360,21 +360,21 @@ Many Farsi verbs are formed by combining a noun or adjective with a simple verb:
 
 ### Compound Verbs
 
-These are extremely common in Farsi and often consist of a non-verbal element plus a simple verb:
+These are extremely common in Persian and often consist of a non-verbal element plus a simple verb:
 - **گوش دادن** (to listen, lit. "ear give")
 - **یاد گرفتن** (to learn, lit. "memory take")
 - **دوست داشتن** (to like/love, lit. "friend have")
 
 ### Taarof (Cultural Politeness)
 
-Farsi has a complex system of politeness (تعارف) that affects language use:
+Persian has a complex system of politeness (تعارف) that affects language use:
 - Using plural forms for singular formal address
 - Special vocabulary for politeness
 - Indirect expressions of desires and requests
 
 Example:
 English: *Please come in.*
-Farsi formal: *بفرمایید.* (Literally "Command" but used as "Please come in/go ahead")
+Persian formal: *بفرمایید.* (Literally "Command" but used as "Please come in/go ahead")
 
 ## Key Translation Tips
 
