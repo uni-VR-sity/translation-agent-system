@@ -27,7 +27,7 @@ st.sidebar.title("API Configuration")
 
 # Use local Ollama checkbox
 if 'prev_use_local_ollama' not in st.session_state:
-    st.session_state.prev_use_local_ollama = False
+    st.session_state.prev_use_local_ollama = True
 
 use_local_ollama = st.sidebar.checkbox("Use Local Ollama", 
                                      value=st.session_state.prev_use_local_ollama, 
