@@ -26,22 +26,23 @@ except FileNotFoundError:
 st.sidebar.title("API Configuration")
 
 # Use local Ollama checkbox
+if 'prev_use_local_ollama' not in st.session_state:
+    st.session_state.prev_use_local_ollama = False
+
 use_local_ollama = st.sidebar.checkbox("Use Local Ollama", 
-                                     value=st.session_state.get('prev_use_local_ollama', False), 
+                                     value=st.session_state.prev_use_local_ollama, 
                                      help="Check to use local Ollama instance instead of remote API")
 
-# Update session state for model provider
-if 'prev_use_local_ollama' not in st.session_state:
-    st.session_state.prev_use_local_ollama = use_local_ollama
-
+# Check if the checkbox state has changed and force a rerun if it has
 if use_local_ollama != st.session_state.prev_use_local_ollama:
-    # Reset models when checkbox changes
     st.session_state.prev_use_local_ollama = use_local_ollama
-    # Clear current model selections to force reset
+    # Reset model selections when provider changes
     if 'model' in st.session_state:
         del st.session_state.model
     if 'fixed_model' in st.session_state:
         del st.session_state.fixed_model
+    # Force page rerun to update UI
+    st.rerun()
 
 # Determine current model options
 if use_local_ollama:
@@ -54,17 +55,12 @@ if not model_options:
     st.error("No models available. Please check the model files.")
     st.stop()
 
-if 'model' not in st.session_state:
+# Set default model if not already set or if current selection is invalid
+if 'model' not in st.session_state or st.session_state.model not in model_options:
     st.session_state.model = model_options[0]
-else:
-    if st.session_state.model not in model_options:
-        st.session_state.model = model_options[0]
 
-if 'fixed_model' not in st.session_state:
+if 'fixed_model' not in st.session_state or st.session_state.fixed_model not in model_options:
     st.session_state.fixed_model = model_options[0]
-else:
-    if st.session_state.fixed_model not in model_options:
-        st.session_state.fixed_model = model_options[0]
 
 # Translation model selection panel
 st.sidebar.subheader("Translation Model")
@@ -79,7 +75,6 @@ fixed_model = st.sidebar.selectbox("Select Fixed Model",
                                  options=model_options, 
                                  index=model_options.index(st.session_state.fixed_model),
                                  key='fixed_model')
-
 
 ui_endpoint_url = st.sidebar.text_input("Endpoint URL (optional)", 
                                     placeholder="Leave blank to use secrets.toml", 
@@ -203,3 +198,4 @@ if submit_button:
                 st.write(final_translation)
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
+            
