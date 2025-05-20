@@ -1,225 +1,62 @@
 import requests
 from typing import List, Dict, Optional
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, WebDriverException
-from bs4 import BeautifulSoup
 
 
 class OpenRouterModelsFetcher:
-    def __init__(self):
-        self.url = "https://openrouter.ai/models"
+    def __init__(self, free_only: bool = False):
+        self.api_url = "https://openrouter.ai/api/v1/models"
+        self.free_only = free_only
         self.models = []
     
-    def fetch_with_selenium(self) -> List[str]:
-        """
-        Fetch models using Selenium WebDriver to handle JavaScript rendering.
-        Returns top 5 model names.
-        """
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")  # Run in background
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--window-size=1920,1080")
-        
-        driver = None
-        try:
-            driver = webdriver.Chrome(options=chrome_options)
-            driver.get(self.url)
-            
-            # Wait for models to load (adjust timeout as needed)
-            wait = WebDriverWait(driver, 15)
-            
-            # Try different selectors that might contain model names
-            possible_selectors = [
-                "[data-testid*='model']",
-                ".model-card",
-                ".model-name",
-                "[class*='model']",
-                "h3", "h4",  # Model names might be in headers
-                ".flex .font-semibold",  # Common pattern for model names
-            ]
-            
-            models = []
-            for selector in possible_selectors:
-                try:
-                    elements = wait.until(
-                        EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector))
-                    )
-                    
-                    for element in elements[:10]:  # Get more than 5 to filter
-                        text = element.text.strip()
-                        if text and len(text) > 2:  # Filter out empty or very short text
-                            models.append(text)
-                    
-                    if models:
-                        break
-                        
-                except TimeoutException:
-                    continue
-            
-            # If no specific selectors worked, try general approach
-            if not models:
-                page_source = driver.page_source
-                soup = BeautifulSoup(page_source, 'html.parser')
-                
-                # Look for text patterns that might be model names
-                potential_models = []
-                for text in soup.get_text().split('\n'):
-                    text = text.strip()
-                    # Filter for potential model names (adjust criteria as needed)
-                    if (text and 
-                        len(text) > 5 and 
-                        len(text) < 50 and
-                        ('gpt' in text.lower() or 
-                         'claude' in text.lower() or
-                         'llama' in text.lower() or
-                         'mistral' in text.lower() or
-                         'gemini' in text.lower() or
-                         'model' in text.lower())):
-                        potential_models.append(text)
-                
-                models = potential_models
-            
-            # Clean and deduplicate models
-            cleaned_models = []
-            seen = set()
-            for model in models:
-                # Clean model name
-                clean_name = model.replace('\n', ' ').strip()
-                if clean_name not in seen and len(clean_name) > 2:
-                    cleaned_models.append(clean_name)
-                    seen.add(clean_name)
-            
-            return cleaned_models[:5]
-            
-        except WebDriverException as e:
-            print(f"WebDriver error: {e}")
-            return []
-        finally:
-            if driver:
-                driver.quit()
-    
-    def fetch_with_requests_session(self) -> List[str]:
-        """
-        Attempt to fetch models using requests with headers that mimic a browser.
-        This might work if the site doesn't heavily rely on JavaScript for initial content.
-        """
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
-        }
-        
-        try:
-            session = requests.Session()
-            response = session.get(self.url, headers=headers, timeout=10)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            # Try to extract model names from the HTML
-            models = []
-            
-            # Look for common patterns where model names might appear
-            for element in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'span', 'div']):
-                text = element.get_text().strip()
-                if (text and 
-                    len(text) > 5 and 
-                    len(text) < 50 and
-                    any(keyword in text.lower() for keyword in ['gpt', 'claude', 'llama', 'mistral', 'gemini'])):
-                    models.append(text)
-            
-            return list(dict.fromkeys(models))[:5]  # Remove duplicates and get top 5
-            
-        except Exception as e:
-            print(f"Requests error: {e}")
-            return []
     
     def fetch_api_alternative(self) -> List[str]:
         """
         Check if OpenRouter has a public API endpoint for models.
         """
-        api_endpoints = [
-            "https://openrouter.ai/api/v1/models",
-            "https://api.openrouter.ai/api/v1/models",
-        ]
         
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
             'Accept': 'application/json',
         }
         
-        for endpoint in api_endpoints:
-            try:
-                response = requests.get(endpoint, headers=headers, timeout=10)
-                if response.status_code == 200:
-                    data = response.json()
-                    
-                    # Extract model names from API response
-                    models = []
-                    if isinstance(data, dict) and 'data' in data:
-                        for model in data['data'][:5]:
-                            if isinstance(model, dict) and 'id' in model:
-                                models.append(model['id'])
-                    elif isinstance(data, list):
-                        for model in data[:5]:
-                            if isinstance(model, dict) and 'id' in model:
-                                models.append(model['id'])
-                    
-                    return models
-                    
-            except Exception as e:
-                print(f"API endpoint {endpoint} failed: {e}")
-                continue
+        
+        try:
+            response = requests.get(self.api_url, headers=headers, timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Extract model names from API response
+                self.models = []
+                if isinstance(data, dict) and 'data' in data:
+                    for model in data['data']:
+                        if isinstance(model, dict) and 'id' in model:
+                            if self.free_only:
+                                if model['id'].endswith(':free'):
+                                    self.models.append(model['id'])
+                            else:
+                                self.models.append(model['id'])
+                
+                return self.models
+                
+        except Exception as e:
+            print(f"API endpoint failed: {e}")
         
         return []
     
-    def get_top_5_models(self) -> List[str]:
+    def write_models_to_file(self, filename: str="./data/openrouter_models.txt") -> None:
         """
-        Main method to fetch top 5 model names from OpenRouter.
-        Tries multiple approaches in order of preference.
+        Write the fetched models to a file.
+        
+        Args:
+            filename: The name of the file to write to
         """
-        print("Attempting to fetch OpenRouter models...")
-        
-        # Method 1: Try API first (fastest and most reliable)
-        models = self.fetch_api_alternative()
-        if models:
-            print(f"Successfully fetched {len(models)} models via API")
-            return models
-        
-        # Method 2: Try requests with browser headers
-        models = self.fetch_with_requests_session()
-        if models:
-            print(f"Successfully fetched {len(models)} models via requests")
-            return models
-        
-        # Method 3: Use Selenium as fallback
         try:
-            models = self.fetch_with_selenium()
-            if models:
-                print(f"Successfully fetched {len(models)} models via Selenium")
-                return models
+            with open(filename, 'w') as f:
+                for model in self.models:
+                    f.write(f"{model}\n")
+            print(f"Models written to {filename}")
         except Exception as e:
-            print(f"Selenium method failed: {e}")
-        
-        # If all methods fail, return a default list
-        print("All methods failed, returning fallback models")
-        return [
-            "anthropic/claude-3-opus",
-            "openai/gpt-4-turbo",
-            "google/gemini-pro",
-            "meta-llama/llama-2-70b-chat",
-            "mistralai/mistral-7b-instruct"
-        ]
-
+            print(f"Error writing to file: {e}")
 
 class OllamaModelsFetcher:
     def __init__(self, ollama_host: str = "http://localhost:11434"):
@@ -367,14 +204,37 @@ class OllamaModelsFetcher:
         
         print("-" * 70)
 
+    def write_models_to_file(self, filename: str = "./data/ollama_models.txt") -> None:
+        """
+        Write the fetched models to a file.
+        
+        Args:
+            filename: The name of the file to write to
+        """
+        try:
+            with open(filename, 'w') as f:
+                for model in self.get_model_names():
+                    f.write(f"{model}\n")
+            print(f"Models written to {filename}")
+        except Exception as e:
+            print(f"Error writing to file: {e}")
 
 
-def fetch_openrouter_models() -> List[str]:
+def fetch_openrouter_models(free_only: bool = False) -> List[str]:
     """
     Convenience function to fetch top 5 OpenRouter model names.
+    
+    Args:
+        free_only: If True, only fetch free models (max_price=0)
+        order_filter: Sorting filter (e.g., 'top-weekly', 'pricing-low-to-high', etc.)
     """
-    fetcher = OpenRouterModelsFetcher()
-    return fetcher.get_top_5_models()
+    fetcher = OpenRouterModelsFetcher(free_only=free_only)
+    models = fetcher.fetch_api_alternative()
+    if models:
+        fetcher.write_models_to_file()
+    else:
+        print("No models found or API endpoint is not accessible.")
+    return models
 
 def list_ollama_models(ollama_host: str = "http://localhost:11434", detailed: bool = True) -> List[str]:
     """
@@ -392,52 +252,21 @@ def list_ollama_models(ollama_host: str = "http://localhost:11434", detailed: bo
     if detailed:
         fetcher.display_models(detailed=True)
     
+    models = fetcher.list_local_models()
+    if models:
+        fetcher.write_models_to_file()
+
     return fetcher.get_model_names()
 
-def get_all_available_models(ollama_host: str = "http://localhost:11434") -> Dict[str, List[str]]:
-    """
-    Get both OpenRouter and local Ollama models.
-    
-    Args:
-        ollama_host: Ollama API endpoint
-    
-    Returns:
-        Dictionary with 'openrouter' and 'ollama' model lists
-    """
-    print("Fetching all available models...")
-    
-    # Get OpenRouter models
-    openrouter_models = fetch_openrouter_models()
-    
-    # Get local Ollama models
-    ollama_fetcher = OllamaModelsFetcher(ollama_host)
-    ollama_models = ollama_fetcher.get_model_names()
-    
-    return {
-        'openrouter': openrouter_models,
-        'ollama': ollama_models
-    }
-
-# Example usage
 if __name__ == "__main__":
-    # Example 1: List local Ollama models only
-    print("=== Local Ollama Models ===")
-    ollama_models = list_ollama_models()
-    
-    # Example 2: Get OpenRouter models from saved HTML
-    print("\n=== OpenRouter Models ===")
-    # openrouter_models = fetch_openrouter_models("Models _ OpenRouter.html")
-    openrouter_models = fetch_openrouter_models()
-    
-    print("Top 5 OpenRouter models:")
-    for i, model in enumerate(openrouter_models, 1):
-        print(f"{i}. {model}")
-    
-    # Example 3: Get all models at once
-    print("\n=== All Available Models ===")
-    all_models = get_all_available_models()
-    
-    print(f"\nSummary:")
-    print(f"- OpenRouter models: {len(all_models['openrouter'])}")
-    print(f"- Local Ollama models: {len(all_models['ollama'])}")
-    
+    # Example usage
+    print("Fetching OpenRouter models...")
+    openrouter_models = fetch_openrouter_models(free_only=True)
+    for model in openrouter_models:
+        print(model)
+
+    print("\nListing local Ollama models...")
+    ollama_models = list_ollama_models(ollama_host="http://localhost:11434", detailed=True)
+    for model in ollama_models:
+        print(model)
+

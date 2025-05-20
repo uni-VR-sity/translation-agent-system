@@ -9,27 +9,76 @@ st.set_page_config(page_title="Hire a Pro Linguist",
                    initial_sidebar_state="collapsed"
                    )
 
+# Load model lists
+try:
+    with open('data/ollama_models.txt', 'r') as f:
+        ollama_models = [line.strip() for line in f.readlines()]
+except FileNotFoundError:
+    ollama_models = []
+
+try:
+    with open('data/openrouter_models.txt', 'r') as f:
+        openrouter_models = [line.strip() for line in f.readlines()]
+except FileNotFoundError:
+    openrouter_models = []
+
 # Sidebar for API configuration
 st.sidebar.title("API Configuration")
 
 # Use local Ollama checkbox
 use_local_ollama = st.sidebar.checkbox("Use Local Ollama", 
-                                     value=False, 
+                                     value=st.session_state.get('prev_use_local_ollama', False), 
                                      help="Check to use local Ollama instance instead of remote API")
+
+# Update session state for model provider
+if 'prev_use_local_ollama' not in st.session_state:
+    st.session_state.prev_use_local_ollama = use_local_ollama
+
+if use_local_ollama != st.session_state.prev_use_local_ollama:
+    # Reset models when checkbox changes
+    st.session_state.prev_use_local_ollama = use_local_ollama
+    # Clear current model selections to force reset
+    if 'model' in st.session_state:
+        del st.session_state.model
+    if 'fixed_model' in st.session_state:
+        del st.session_state.fixed_model
+
+# Determine current model options
+if use_local_ollama:
+    model_options = ollama_models
+else:
+    model_options = openrouter_models
+
+# Initialize or validate model selections
+if not model_options:
+    st.error("No models available. Please check the model files.")
+    st.stop()
+
+if 'model' not in st.session_state:
+    st.session_state.model = model_options[0]
+else:
+    if st.session_state.model not in model_options:
+        st.session_state.model = model_options[0]
+
+if 'fixed_model' not in st.session_state:
+    st.session_state.fixed_model = model_options[0]
+else:
+    if st.session_state.fixed_model not in model_options:
+        st.session_state.fixed_model = model_options[0]
 
 # Translation model selection panel
 st.sidebar.subheader("Translation Model")
 model = st.sidebar.selectbox("Select Model", 
-                            ["openai/gpt-4o-mini", "microsoft/phi-3-small-8k-instruct", "google/gemma-3-12b", "microsoft/phi4"], 
-                            index=0, 
-                            help="Choose from OpenRouter-supported models")
+                            options=model_options, 
+                            index=model_options.index(st.session_state.model),
+                            key='model')
 
 # Fixed model selection panel
 st.sidebar.subheader("Fixed Model (for processing/judging)")
 fixed_model = st.sidebar.selectbox("Select Fixed Model", 
-                                 ["openai/gpt-4o-mini", "microsoft/phi-3-small-8k-instruct", "google/gemma-3-12b", "microsoft/phi4"], 
-                                 index=0, 
-                                 help="Choose from OpenRouter-supported models")
+                                 options=model_options, 
+                                 index=model_options.index(st.session_state.fixed_model),
+                                 key='fixed_model')
 
 
 ui_endpoint_url = st.sidebar.text_input("Endpoint URL (optional)", 
@@ -77,7 +126,7 @@ if submit_button:
             if use_local_ollama:
                 # Using local Ollama for all models
                 endpoint = st.secrets["ollama"]["ENDPOINT_URL"]
-                api_key = fixed_api_key = ""
+                api_key = ""
                 
             else:
                 # Use OpenRouter for non-local models
@@ -86,8 +135,8 @@ if submit_button:
                 
                 # Override with user-provided credentials if available
                 if ui_endpoint_url and ui_api_key:
-                    translation_endpoint = fixed_endpoint =  ui_endpoint_url
-                    translation_api_key = fixed_api_key = ui_api_key
+                    endpoint =  ui_endpoint_url
+                    api_key = ui_api_key
 
             # Read content from uploaded files
             grammar_content = grammar_file.read().decode("utf-8") if grammar_file else None
@@ -102,10 +151,10 @@ if submit_button:
                 "dictionary_content_raw": dictionary_content,
                 "grammar_content_raw": grammar_content,
                 "examples_content_raw": examples_content,
-                "translation_model": model,
-                "fixed_model": fixed_model,
-                "api_base": translation_endpoint,
-                "api_key": translation_api_key,
+                "translation_model": f'ollama/{model}' if use_local_ollama else f'openrouter/{model}',
+                "fixed_model": f'ollama/{fixed_model}' if use_local_ollama else f'openrouter/{fixed_model}',
+                "api_base": endpoint,
+                "api_key": api_key,
                 "use_judge": use_llm_judge
             }
 

@@ -19,19 +19,6 @@ logger = logging.getLogger(__name__)
 # litellm._turn_on_debug()
 client = instructor.from_litellm(completion)
 
-# Function to determine if we're using Ollama
-def is_ollama_model(model_name):
-    """Check if the model name indicates an Ollama model."""
-    return not model_name.startswith("azure/")
-
-# Prepare model name for API calls
-def prepare_model_name(model_name, api_base):
-    """Format the model name correctly for the API call."""
-    if "localhost:11434" in api_base and not model_name.startswith("ollama/"):
-        # For Ollama models, we need to add the ollama/ prefix
-        return f"ollama/{model_name}"
-    return model_name
-
 # Define the state schema
 class TranslationState(TypedDict):
     sentence: str
@@ -44,13 +31,9 @@ class TranslationState(TypedDict):
     grammar_content: Optional[List[str]]
     examples_content: Optional[List[str]]
     translation_model: str
-    translation_api_base: str
-    translation_api_key: str
-    translation_api_version: str
     fixed_model: str
-    fixed_api_base: str
-    fixed_api_key: str
-    fixed_api_version: str
+    api_base: str
+    api_key: str
     use_judge: bool
     translation_prompt: Optional[str]
     initial_translation: Optional[str]
@@ -94,20 +77,16 @@ def process_dictionary(state: TranslationState) -> TranslationState:
                                    text=state["sentence"],
                                    dictionary=dictionary_text)
     
-    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
     
     response = client.chat.completions.create(
-        model=model,
-        api_base=state["fixed_api_base"],
-        api_key=state["fixed_api_key"],
-        api_version=state["fixed_api_version"],
+        model=state["fixed_model"],
+        api_base=state["api_base"],
+        api_key=state["api_key"],
         messages=[
             {"role": "system", "content": "You are a language processing assistant."},
             {"role": "user", "content": prompt}
         ],
         response_model=DictionaryOutput,
-        max_tokens=200,
-        temperature=0.5
     )
     
     return {"dictionary_content": response.word_pairs}
@@ -123,13 +102,11 @@ def process_grammar(state: TranslationState) -> TranslationState:
                                 text=state["sentence"],
                                 grammar=grammar_text)
     
-    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
     
     response = client.chat.completions.create(
-        model=model,
-        api_base=state["fixed_api_base"],
-        api_key=state["fixed_api_key"],
-        api_version=state["fixed_api_version"],
+        model=state["fixed_model"],
+        api_base=state["api_base"],
+        api_key=state["api_key"],
         messages=[
             {"role": "system", "content": "You are a language processing assistant."},
             {"role": "user", "content": prompt}
@@ -152,13 +129,11 @@ def process_examples(state: TranslationState) -> TranslationState:
                                  text=state["sentence"],
                                  examples=examples_text)
     
-    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
     
     response = client.chat.completions.create(
-        model=model,
-        api_base=state["fixed_api_base"],
-        api_key=state["fixed_api_key"],
-        api_version=state["fixed_api_version"],
+        model=state["fixed_model"],
+        api_base=state["api_base"],
+        api_key=state["api_key"],
         messages=[
             {"role": "system", "content": "You are a language processing assistant."},
             {"role": "user", "content": prompt}
@@ -188,18 +163,13 @@ def perform_translation(state: TranslationState) -> TranslationState:
         {"role": "user", "content": translation_prompt}
     ]
     
-    model = prepare_model_name(state["translation_model"], state["translation_api_base"])
     
     response = client.chat.completions.create(
-        model=model,
-        api_base=state["translation_api_base"],
-        api_key=state["translation_api_key"],
-        api_version=state["translation_api_version"],
+        model=state["translation_model"],
+        api_base=state["api_base"],
+        api_key=state["api_key"],
         messages=chat_prompt,
         response_model=None,
-        max_tokens=800,
-        temperature=0.7,
-        top_p=0.95
     )
     
     translation = response.choices[0].message.content
@@ -222,13 +192,11 @@ def judge_translation(state: TranslationState) -> TranslationState:
         translation_prompt=state["translation_prompt"]
     )
     
-    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
     
     response = client.chat.completions.create(
-        model=model,
-        api_base=state["fixed_api_base"],
-        api_key=state["fixed_api_key"],
-        api_version=state["fixed_api_version"],
+        model=state["fixed_model"],
+        api_base=state["api_base"],
+        api_key=state["api_key"],
         messages=[
             {"role": "system", "content": "You are a translation quality evaluator."},
             {"role": "user", "content": judge_prompt}
@@ -257,14 +225,11 @@ def retry_translation(state: TranslationState) -> TranslationState:
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": retry_prompt}
     ]
-    
-    model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
-    
+        
     response = client.chat.completions.create(
-        model=model,
-        api_base=state["fixed_api_base"],
-        api_key=state["fixed_api_key"],
-        api_version=state["fixed_api_version"],
+        model=state["translation_model"],
+        api_base=state["api_base"],
+        api_key=state["api_key"],
         messages=chat_prompt,
         response_model=None,
         max_tokens=800,
@@ -351,13 +316,10 @@ async def split_corpus(state: TranslationState) -> TranslationState:
     try:
         prompt = get_chunking_prompt(state["sentence"])
         
-        model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
-        
         response = client.chat.completions.create(
-            model=model,
-            api_base=state["fixed_api_base"],
-            api_key=state["fixed_api_key"],
-            api_version=state["fixed_api_version"],
+            model=state["fixed_model"],
+            api_base=state["api_base"],
+            api_key=state["api_key"],
             messages=[
                 {"role": "system", "content": "You are a text processing assistant."},
                 {"role": "user", "content": prompt}
@@ -413,13 +375,10 @@ async def check_consistency(state: TranslationState) -> TranslationState:
             translations=state["chunk_translations"]
         )
         
-        model = prepare_model_name(state["fixed_model"], state["fixed_api_base"])
-        
         response = client.chat.completions.create(
-            model=model,
-            api_base=state["fixed_api_base"],
-            api_key=state["fixed_api_key"],
-            api_version=state["fixed_api_version"],
+            model=state["fixed_model"],
+            api_base=state["api_base"],
+            api_key=state["api_key"],
             messages=[
                 {"role": "system", "content": "You are a translation quality evaluator."},
                 {"role": "user", "content": prompt}
