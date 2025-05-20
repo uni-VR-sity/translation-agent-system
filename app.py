@@ -121,7 +121,7 @@ if submit_button:
             if use_local_ollama:
                 # Using local Ollama for all models
                 endpoint = st.secrets["ollama"]["ENDPOINT_URL"]
-                api_key = ""
+                api_key = st.secrets["ollama"]["API_KEY"]
                 
             else:
                 # Use OpenRouter for non-local models
@@ -146,8 +146,8 @@ if submit_button:
                 "dictionary_content_raw": dictionary_content,
                 "grammar_content_raw": grammar_content,
                 "examples_content_raw": examples_content,
-                "translation_model": f'ollama/{model}' if use_local_ollama else f'openrouter/{model}',
-                "fixed_model": f'ollama/{fixed_model}' if use_local_ollama else f'openrouter/{fixed_model}',
+                "translation_model": f'openai/{model}' if use_local_ollama else f'openrouter/{model}',
+                "fixed_model": f'openai/{fixed_model}' if use_local_ollama else f'openrouter/{fixed_model}',
                 "api_base": endpoint,
                 "api_key": api_key,
                 "use_judge": use_llm_judge
