@@ -2,6 +2,7 @@ import streamlit as st
 from graph import build_translation_graph, build_supernode_graph
 import uuid
 import asyncio
+from prompts import initialize_dspy_model
 
 # Streamlit app configuration
 st.set_page_config(page_title="Hire a Pro Linguist",
@@ -152,6 +153,8 @@ if submit_button:
                 "api_key": api_key,
                 "use_judge": use_llm_judge
             }
+
+            initialize_dspy_model(model=initial_state["fixed_model"], api_base= endpoint, api_key=api_key)
 
             # Choose processing mode
             if processing_mode == "Single Sentence":
