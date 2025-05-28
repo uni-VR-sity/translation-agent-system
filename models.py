@@ -261,7 +261,7 @@ def list_ollama_models(ollama_host: str = "http://localhost:11434", detailed: bo
 if __name__ == "__main__":
     # Example usage
     print("Fetching OpenRouter models...")
-    openrouter_models = fetch_openrouter_models(free_only=True)
+    openrouter_models = fetch_openrouter_models(free_only=False)
     for model in openrouter_models:
         print(model)
 
