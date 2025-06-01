@@ -168,7 +168,7 @@ class ChunkingModule(dspy.Module):
         super().__init__()
         self.prompt = dspy.Predict("text, max_chunk_size -> prompt")
     
-    def forward(self, text, max_chunk_size=500):
+    def forward(self, text, max_chunk_size=200):
         try:
             return self.prompt(
                 text=text,
