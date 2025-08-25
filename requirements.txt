@@ -1,4 +1,5 @@
 
+# Core dependencies
 streamlit
 langgraph
 pydantic
@@ -6,3 +7,11 @@ litellm
 python-dotenv
 instructor
 dspy-ai
+
+# Memory system dependencies
+plotly>=5.0.0
+pandas>=1.3.0
+matplotlib>=3.5.0
+
+# Additional utilities
+pathlib2>=2.3.0
