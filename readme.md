@@ -56,12 +56,12 @@ An AI-powered translation system that utilizes a multi-agent approach to produce
 Create a `secrets.toml` file in the `.streamlit` directory with your Azure OpenAI API credentials:
 
 ```toml
-[Gpt-4o-mini]
+[openrouter]
 ENDPOINT_URL = "https://your-endpoint.com/"
 API_KEY = "your-api-key"
 
-[Phi-3-small-8k-instruct]
-ENDPOINT_URL = "https://your-endpoint.com/"
+[ollama]
+ENDPOINT_URL = "http://localhost:11434/v1"
 API_KEY = "your-api-key"
 ```
 
