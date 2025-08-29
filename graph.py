@@ -8,16 +8,29 @@ import instructor
 from litellm import completion
 import litellm
 from pydantic import BaseModel
+from datetime import datetime
 from prompts import (get_system_prompt, get_translation_prompt,
-                      get_dictionary_prompt, get_grammar_prompt, 
+                      get_dictionary_prompt, get_grammar_prompt,
                       get_examples_prompt, get_retry_prompt, get_judge_prompt,
                       get_chunking_prompt, get_consistency_prompt)
+
+# Import memory system components
+from memory_system import MemoryManager, TranslationSession, calculate_text_characteristics
+from learning_engine import LearningEngine
+from adaptive_components import AdaptivePromptEnhancer, SmartContextSelector, ModelOptimizer
 
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 # litellm._turn_on_debug()
 client = instructor.from_litellm(completion)
+
+# Initialize memory system components (global instances)
+memory_manager = MemoryManager()
+learning_engine = LearningEngine(memory_manager)
+prompt_enhancer = AdaptivePromptEnhancer(memory_manager, learning_engine)
+context_selector = SmartContextSelector(memory_manager, learning_engine)
+model_optimizer = ModelOptimizer(memory_manager, learning_engine)
 
 # Define the state schema
 class TranslationState(TypedDict):
@@ -43,6 +56,10 @@ class TranslationState(TypedDict):
     consistency_feedback: Optional[str]
     consistency_status: Optional[str]
     chunk_translations: Optional[List[str]]
+    # Memory-related fields
+    session_id: Optional[str]
+    processing_start_time: Optional[datetime]
+    memory_recommendations: Optional[Dict[str, Any]]
 
 # Pydantic model for dictionary output
 class DictionaryOutput(BaseModel):
@@ -145,11 +162,13 @@ def process_examples(state: TranslationState) -> TranslationState:
     
     return {"examples_content": response.samples}
 
-# Node for main translation
+# Node for main translation with memory enhancement
 def perform_translation(state: TranslationState) -> TranslationState:
     
     system_prompt = get_system_prompt()
-    translation_prompt = get_translation_prompt(
+    
+    # Get base translation prompt
+    base_translation_prompt = get_translation_prompt(
         source_language=state["source_language"],
         target_language=state["target_language"],
         text=state["sentence"],
@@ -158,14 +177,33 @@ def perform_translation(state: TranslationState) -> TranslationState:
         examples=state.get("examples_content")
     )
     
+    # Enhance prompt with learned patterns
+    enhanced_translation_prompt = prompt_enhancer.enhance_translation_prompt(
+        base_translation_prompt,
+        state["source_language"],
+        state["target_language"],
+        state["sentence"],
+        state.get("dictionary_content"),
+        state.get("grammar_content"),
+        state.get("examples_content")
+    )
+    
     chat_prompt = [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": translation_prompt}
+        {"role": "user", "content": enhanced_translation_prompt}
     ]
     
+    # Use memory-optimized model if available
+    recommended_models = model_optimizer.recommend_optimal_models(
+        f"{state['source_language']}-{state['target_language']}",
+        calculate_text_characteristics(state['sentence']),
+        {'translation_model': [state['translation_model']]}
+    )
+    
+    selected_model = recommended_models.get('translation_model', state['translation_model'])
     
     response = client.chat.completions.create(
-        model=state["translation_model"],
+        model=selected_model,
         api_base=state["api_base"],
         api_key=state["api_key"],
         messages=chat_prompt,
@@ -174,14 +212,17 @@ def perform_translation(state: TranslationState) -> TranslationState:
     
     translation = response.choices[0].message.content
     return {
-        "translation_prompt": translation_prompt,
+        "translation_prompt": enhanced_translation_prompt,
         "initial_translation": translation,
         "final_translation": translation
     }
 
-# Node for judge evaluation
+# Node for judge evaluation with memory learning
 def judge_translation(state: TranslationState) -> TranslationState:
     if not state.get("use_judge"):
+        # Still learn from non-judged sessions
+        if state.get('session_id'):
+            _learn_from_session(state, state.get('final_translation'))
         return state
     
     judge_prompt = get_judge_prompt(
@@ -191,7 +232,6 @@ def judge_translation(state: TranslationState) -> TranslationState:
         translation=state["initial_translation"],
         translation_prompt=state["translation_prompt"]
     )
-    
     
     response = client.chat.completions.create(
         model=state["fixed_model"],
@@ -207,6 +247,11 @@ def judge_translation(state: TranslationState) -> TranslationState:
     )
     
     feedback = response.choices[0].message.content
+    
+    # Learn from judged sessions immediately if approved
+    if feedback == "APPROVED" and state.get('session_id'):
+        _learn_from_session(state, state.get('final_translation'), feedback)
+    
     return {"judge_feedback": feedback}
 
 # Conditional edge to decide retry or end
@@ -215,7 +260,7 @@ def decide_retry(state: TranslationState) -> str:
         return END
     return "retry_translation"
 
-# Node for retry translation with judge feedback
+# Node for retry translation with judge feedback and memory learning
 def retry_translation(state: TranslationState) -> TranslationState:
     
     system_prompt = get_system_prompt()
@@ -238,20 +283,49 @@ def retry_translation(state: TranslationState) -> TranslationState:
     )
     
     translation = response.choices[0].message.content
+    
+    # Learn from the retry session
+    if state.get('session_id'):
+        _learn_from_session(state, translation)
+    
     return {"final_translation": translation}
 
 async def process_resources_parallel(state: TranslationState) -> TranslationState:
     logger.debug("process_resources_parallel: Starting parallel processing")
     
+    # Initialize session tracking
+    session_id = str(uuid.uuid4())
+    processing_start_time = datetime.now()
+    
+    # Get memory recommendations for context optimization
+    language_pair = f"{state['source_language']}-{state['target_language']}"
+    text_characteristics = calculate_text_characteristics(state['sentence'])
+    recommendations = learning_engine.get_recommendations(language_pair, text_characteristics)
+    
+    # Optimize context usage based on learned patterns
+    available_contexts = {
+        'dictionary': state.get('dictionary_content_raw'),
+        'grammar': state.get('grammar_content_raw'),
+        'examples': state.get('examples_content_raw')
+    }
+    
+    optimized_contexts = context_selector.optimize_context_usage(
+        language_pair, state['sentence'], available_contexts
+    )
+    
+    # Update state with optimized contexts
+    optimized_state = state.copy()
+    optimized_state.update(optimized_contexts)
+    
     # Define coroutines for each processing task
     async def run_dictionary():
-        return process_dictionary(state)
+        return process_dictionary(optimized_state)
     
     async def run_grammar():
-        return process_grammar(state)
+        return process_grammar(optimized_state)
     
     async def run_examples():
-        return process_examples(state)
+        return process_examples(optimized_state)
     
     # Run all tasks in parallel
     results = await asyncio.gather(
@@ -262,7 +336,11 @@ async def process_resources_parallel(state: TranslationState) -> TranslationStat
     )
     
     # Initialize state updates
-    state_updates = {}
+    state_updates = {
+        "session_id": session_id,
+        "processing_start_time": processing_start_time,
+        "memory_recommendations": recommendations
+    }
     
     # Process results
     for i, result in enumerate(results):
@@ -309,6 +387,87 @@ def build_translation_graph() -> StateGraph:
     
     # Compile the graph with memory
     return graph.compile(checkpointer=MemorySaver())
+
+def _learn_from_session(state: TranslationState, final_translation: Optional[str] = None, judge_feedback: Optional[str] = None) -> None:
+    """Helper function to learn from a translation session"""
+    try:
+        # Calculate processing time
+        processing_time = 0
+        if state.get('processing_start_time'):
+            processing_time = (datetime.now() - state['processing_start_time']).total_seconds()
+        
+        # Create translation session record
+        session = TranslationSession(
+            session_id=state.get('session_id', str(uuid.uuid4())),
+            timestamp=datetime.now(),
+            source_language=state['source_language'],
+            target_language=state['target_language'],
+            original_text=state['sentence'],
+            initial_translation=state.get('initial_translation', ''),
+            final_translation=final_translation or state.get('final_translation', ''),
+            judge_feedback=judge_feedback or state.get('judge_feedback'),
+            processing_mode='single',  # or 'corpus' for supernode
+            models_used={
+                'translation_model': state['translation_model'],
+                'fixed_model': state['fixed_model']
+            },
+            context_files_used={
+                'dictionary': state.get('dictionary_content_raw') is not None,
+                'grammar': state.get('grammar_content_raw') is not None,
+                'examples': state.get('examples_content_raw') is not None
+            },
+            performance_metrics={
+                'processing_time': processing_time,
+                'retry_needed': state.get('initial_translation') != final_translation,
+                'context_count': sum([
+                    state.get('dictionary_content_raw') is not None,
+                    state.get('grammar_content_raw') is not None,
+                    state.get('examples_content_raw') is not None
+                ])
+            }
+        )
+        
+        # Learn from the session
+        learning_results = learning_engine.learn_from_session(session)
+        logger.info(f"Learning results: {learning_results}")
+        
+    except Exception as e:
+        logger.error(f"Error in learning from session: {e}")
+
+def get_memory_insights(language_pair: str = None) -> Dict[str, Any]:
+    """Get memory system insights for analytics"""
+    try:
+        insights = {
+            'total_sessions': 0,
+            'feedback_patterns': [],
+            'successful_patterns': [],
+            'model_performance': {},
+            'recommendations': []
+        }
+        
+        # Get translation history
+        history = memory_manager.get_translation_history(language_pair=language_pair, days=30)
+        insights['total_sessions'] = len(history)
+        
+        # Get feedback patterns
+        if language_pair:
+            feedback_patterns = memory_manager.get_feedback_patterns(language_pair, limit=5)
+            insights['feedback_patterns'] = [
+                {
+                    'type': p.feedback_type,
+                    'frequency': p.frequency_count,
+                    'issues': p.common_issues[:3]
+                } for p in feedback_patterns
+            ]
+            
+            # Get model performance insights
+            insights['model_performance'] = model_optimizer.get_model_performance_insights(language_pair)
+        
+        return insights
+        
+    except Exception as e:
+        logger.error(f"Error getting memory insights: {e}")
+        return {}
 
 # Node to split corpus into chunks
 async def split_corpus(state: TranslationState) -> TranslationState:

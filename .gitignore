@@ -2,3 +2,4 @@
 *.pyc
 data/ollama_models.txt
 data/openrouter_models.txt
+*.db
